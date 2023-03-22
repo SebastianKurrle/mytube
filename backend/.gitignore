@@ -1,0 +1,12 @@
+*.pyc
+__pycache__/
+*.sqlite3
+*.pyo
+*.pyc
+*.pyd
+*.py~
+*.bak
+*.swp
+*.log
+*.cache
+*.egg-info/
