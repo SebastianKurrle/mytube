@@ -14,5 +14,8 @@ class MyTubeAccount(models.Model):
     def __str__(self):
         return self.name
 
-    def get_image(self):
+    def get_absolute_url(self):
+        return 'http://localhost:5173/' + str(self.name)
+
+    def get_prof_picture(self):
         return 'http://127.0.0.1:8000' + self.profile_picture.url

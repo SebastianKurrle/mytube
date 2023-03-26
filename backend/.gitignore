@@ -9,4 +9,5 @@ __pycache__/
 *.log
 *.cache
 *.egg-info/
-venvs
+venv
+media
