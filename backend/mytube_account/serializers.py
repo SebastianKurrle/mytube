@@ -1,4 +1,5 @@
 from rest_framework import serializers, validators
+from rest_framework.exceptions import ErrorDetail
 from .models import MyTubeAccount
 
 
@@ -20,7 +21,7 @@ class MyTubeAccountSerializer(serializers.ModelSerializer):
             'name': {
                 'validators': [
                     validators.UniqueValidator(
-                        MyTubeAccount.objects.all(), 'A MyTube account with that name already exists'
+                        MyTubeAccount.objects.all(), ErrorDetail('A MyTube account with that name already exists')
                     )
                 ]
             }
