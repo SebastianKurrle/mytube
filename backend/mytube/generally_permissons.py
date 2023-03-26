@@ -2,6 +2,7 @@
 
 from rest_framework.permissions import BasePermission
 from rest_framework.exceptions import AuthenticationFailed
+import jwt
 
 
 # Checks if a user is authenticated
@@ -11,5 +12,10 @@ class IsAuthenticated(BasePermission):
 
         if not token:
             raise AuthenticationFailed('Unauthenticated')
+
+        try:
+            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Unauthenticated!')
 
         return True
