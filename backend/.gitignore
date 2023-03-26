@@ -10,4 +10,3 @@ __pycache__/
 *.cache
 *.egg-info/
 venvs
-.idea
