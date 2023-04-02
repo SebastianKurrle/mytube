@@ -8,7 +8,7 @@ import jwt
 # Checks if a user is authenticated
 class IsAuthenticated(BasePermission):
     def has_permission(self, request, view):
-        token = request.COOKIES.get('jwt')
+        token = request.headers['Authorization'].split(' ')[1]
 
         if not token:
             raise AuthenticationFailed('Unauthenticated')

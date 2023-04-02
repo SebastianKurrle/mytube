@@ -2,26 +2,24 @@
 import { onMounted, onBeforeMount ,ref } from 'vue';
 import { useCookies } from 'vue3-cookies';
 import { useAuthenticatedStore } from './stores/authenticated';
+import { RouterView } from 'vue-router';
 import axios from 'axios';
 
 // components
-import Sidebar from './components/Sidebar.vue'
-
-// stores
-const authenticatedStore = useAuthenticatedStore()
-
-const { cookies } = useCookies()
-
-// onBeforeMount(async() => {
-//   await authenticatedStore.checkToken(cookies.get('jwt'), false)
-// })
+import Navbar from './components/Navbar.vue'
+import Searchbar from './components/Searchbar.vue';
 </script>
 
 <template>
-  <div>
-      <header>
-        <Sidebar />
-      </header>
+  <div class="h-screen bg-neutral-800">
+    <header>
+      <Navbar />
+    </header>
+
+    <main class="container m-auto">
+      <Searchbar />
+      <RouterView />
+    </main>
   </div>
 </template>
 

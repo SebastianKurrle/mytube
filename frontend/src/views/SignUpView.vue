@@ -63,5 +63,5 @@ const submitSignUp = () => {
 </template>
 
 <style scoped>
-    @import url('@/assets/style/authenticate.css');
+    @import url('@/assets/style/forms.css');
 </style>

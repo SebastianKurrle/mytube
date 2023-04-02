@@ -104,7 +104,7 @@ export const useAuthenticatedStore = defineStore('authenticated', () => {
                 cookies.remove('jwt')
                 axios.defaults.headers.common['Authorization'] = ''
 
-                router.push('/login')
+                router.push({ name: 'login' })
             })
             .catch(error => {
                 toast.error('Logout error', { autoClose: 3000 })

@@ -7,6 +7,7 @@ import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 import AccountView from '@/views/AccountView.vue'
+import CreateMyTubeAccount from '@/views/CreateMyTubeAccount.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,15 @@ const router = createRouter({
       path: '/account',
       name: 'account',
       component: AccountView,
+
+      meta: {
+        requireLogin: true
+      }
+    },
+    {
+      path: '/mytube-account/create',
+      name: 'mytube-create',
+      component: CreateMyTubeAccount,
 
       meta: {
         requireLogin: true
