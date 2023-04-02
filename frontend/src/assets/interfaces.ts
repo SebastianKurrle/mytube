@@ -12,4 +12,11 @@ interface UserLogin {
     password:string
 }
 
-export type { User, UserLogin }
+interface MyTubeAccount {
+    name:string,
+    description:string,
+    profile_picture:object,
+    owner:number
+}
+
+export type { User, UserLogin, MyTubeAccount }

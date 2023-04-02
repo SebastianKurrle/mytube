@@ -7,7 +7,6 @@ import axios from 'axios';
 
 // components
 import Navbar from './components/Navbar.vue'
-import Searchbar from './components/Searchbar.vue';
 </script>
 
 <template>
@@ -16,8 +15,7 @@ import Searchbar from './components/Searchbar.vue';
       <Navbar />
     </header>
 
-    <main class="container m-auto">
-      <Searchbar />
+    <main class="container m-auto mt-3">
       <RouterView />
     </main>
   </div>

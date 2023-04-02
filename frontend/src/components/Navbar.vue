@@ -49,14 +49,14 @@ const authenticatedStore = useAuthenticatedStore()
           <RouterLink :to="{name: 'account'}"
             class="text-white disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
             data-te-nav-link-ref
-            >Account</RouterLink>
+            ><font-awesome-icon icon="fa-solid fa-user" class="mr-3"/> Account</RouterLink>
         </li>
 
         <li class="p-2" data-te-nav-item-ref v-if="authenticatedStore.authenticated">
-          <RouterLink :to="{name: 'mytube-create'}"
+          <RouterLink :to="{name: 'mytube-account'}"
             class="text-white disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
             data-te-nav-link-ref
-            >Create MyTube Account</RouterLink>
+            ><font-awesome-icon icon="fa-solid fa-video" class="mr-3"/> MyTube Account</RouterLink>
         </li>
 
         <li class="p-2" data-te-nav-item-ref v-if="!authenticatedStore.authenticated">
@@ -73,6 +73,7 @@ const authenticatedStore = useAuthenticatedStore()
             >Sign Up</RouterLink>
         </li>
       </ul>
+      <Searchbar />
       <!-- Left links -->
     </div>
     <!-- Collapsible wrapper -->
