@@ -15,12 +15,18 @@
     "@fortawesome/free-regular-svg-icons": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/vue-fontawesome": "^3.0.3",
+    "axios": "^1.3.4",
+    "js-cookie": "^3.0.1",
     "pinia": "^2.0.32",
     "tw-elements": "^1.0.0-beta1",
     "vue": "^3.2.47",
-    "vue-router": "^4.1.6"
+    "vue-cookies": "^1.8.3",
+    "vue-router": "^4.1.6",
+    "vue3-cookies": "^1.0.6",
+    "vue3-toastify": "^0.1.6"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.3",
     "@types/node": "^18.14.2",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/tsconfig": "^0.1.3",

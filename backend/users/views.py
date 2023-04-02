@@ -37,7 +37,6 @@ class LoginView(APIView):
 
         response = Response()
 
-        response.set_cookie(key='jwt', value=token, httponly=True)
         response.data = {
             'jwt': token
         }
@@ -47,10 +46,15 @@ class LoginView(APIView):
 class UserView(APIView):
 
     def get(self, request):
-        token = request.COOKIES.get('jwt')
-
-        if not token:
+        if 'Authorization' not in request.headers:
             raise AuthenticationFailed('Unauthenticated!')
+
+        auth_header = request.headers['Authorization']
+
+        if not auth_header.startswith('Bearer'):
+            raise AuthenticationFailed('Invalid Token')
+
+        token = auth_header.split(' ')[1]
 
         try:
             payload = jwt.decode(token, 'secret', algorithms=['HS256'])
@@ -65,7 +69,6 @@ class UserView(APIView):
 class LogoutView(APIView):
     def post(self, request):
         response = Response()
-        response.delete_cookie('jwt')
         response.data = {
             'message': 'success'
         }
