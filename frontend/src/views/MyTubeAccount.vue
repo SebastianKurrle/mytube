@@ -1,6 +1,26 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useMyTubeAccountStore } from '@/stores/mytubeAccount';
+import axios from 'axios';
+
 // components
 import CreateMyTubeAccount from '@/components/CreateMyTubeAccount.vue';
+import ListMyTubeAccounts from '@/components/ListMyTubeAccounts.vue';
+
+// stores
+const myTubeAccountStore = useMyTubeAccountStore()
+
+const mytubeAccounts = ref()
+
+
+onMounted(() => {
+    const accounts = myTubeAccountStore.getMyTubeAccounts()
+
+    console.log(accounts.then((acc) => {
+        mytubeAccounts.value = acc
+    }))
+})
+
 </script>
 
 <template>
@@ -19,6 +39,10 @@ import CreateMyTubeAccount from '@/components/CreateMyTubeAccount.vue';
             <h5 class="text-xl text-neutral-400 mb-3">Getting Started</h5>
 
             <CreateMyTubeAccount />
+
+            <h5 class="text-xl text-neutral-400 mt-3">Your MyTube Accounts</h5>
+
+            <ListMyTubeAccounts v-for="account in mytubeAccounts" :key="account.id" :account="account"/>
         </div>
    </div>
 </template>

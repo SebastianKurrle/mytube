@@ -4,6 +4,7 @@ from .serializers import MyTubeAccountSerializer
 from .models import MyTubeAccount
 from django.shortcuts import get_object_or_404
 from mytube.generally_permissons import IsAuthenticated
+from users.extensions import get_user_by_token
 
 
 class MyTubeAccountView(APIView):
@@ -19,10 +20,13 @@ class MyTubeAccountView(APIView):
 
         return Response(serializer.data)
 
-    # gets an account with an id
-    def get(self, request, id):
-        mytube_account = get_object_or_404(MyTubeAccount, id=id)
-        serializer = MyTubeAccountSerializer(mytube_account)
+    # gets all mytube accounts from a user
+    def get(self, request):
+        token = request.headers['Authorization'].split(' ')[1]
+        user = get_user_by_token(token)
+
+        mytube_accounts = MyTubeAccount.objects.filter(owner=user)
+        serializer = MyTubeAccountSerializer(mytube_accounts, many=True)
 
         return Response(serializer.data)
 

@@ -18,7 +18,6 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
                 }
             })
             .then(response => {
-                console.log(response)
                 toast.success('MyTube Account created', { autoClose: 3000 })
             })
             .catch(error => {
@@ -34,5 +33,21 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
             })
     }
 
-    return { createErrors, createMyTubeAccount }
+    const getMyTubeAccounts = async () => {
+        let mytubeAccounts = {}
+
+        await axios
+            .get('/api/mytube-account/')
+            .then(response => {
+                mytubeAccounts = response.data
+                console.log(mytubeAccounts)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        
+        return mytubeAccounts
+    }
+
+    return { createErrors, createMyTubeAccount, getMyTubeAccounts }
 })

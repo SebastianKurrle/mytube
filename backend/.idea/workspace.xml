@@ -6,10 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="53723e1a-b6c7-4be0-b49a-e566f4df0674" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mytube_account/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/mytube_account/apps.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mytube_account/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/mytube_account/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mytube_account/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/mytube_account/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/router/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytube_account/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mytube_account/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mytube_account/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/mytube_account/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
