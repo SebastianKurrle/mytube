@@ -33,17 +33,6 @@
 
 <template>
     <div>
-        <!-- Button trigger modal -->
-        <button
-        type="button"
-        class="bg-blue-700 p-3 rounded-md text-white hover:bg-blue-800"
-        data-te-toggle="modal"
-        data-te-target="#createMyTubeAccount"
-        data-te-ripple-init
-        data-te-ripple-color="light">
-        Create MyTube Account
-        </button>
-
         <!-- Modal -->
         <div
         data-te-modal-init
@@ -114,7 +103,8 @@
                 class="inline-block rounded bg-primary-100 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
                 data-te-modal-dismiss
                 data-te-ripple-init
-                data-te-ripple-color="light">
+                data-te-ripple-color="light"
+                >
                 Close
             </button>
             </div>

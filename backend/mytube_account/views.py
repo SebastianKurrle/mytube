@@ -30,3 +30,13 @@ class MyTubeAccountView(APIView):
 
         return Response(serializer.data)
 
+    # deletes an account by an id
+    def delete(self, request, id):
+        instance = MyTubeAccount.objects.get(id=id)
+
+        if instance is None:
+            return Response(status=404)
+
+        instance.delete()
+        return Response(status=200)
+

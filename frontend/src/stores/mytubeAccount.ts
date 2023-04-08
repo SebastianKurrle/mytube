@@ -7,6 +7,10 @@ import axios from "axios";
 // handles the mytube account functions
 export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
     const createErrors = reactive(Array())
+    const userMyTubeAccounts = reactive(Array())
+
+    // Saves the selected account from the user to delete
+    const selectedAccount = ref()
 
     const createMyTubeAccount = async (mytubeAccount:MyTubeAccount) => {
         createErrors.length = 0
@@ -19,6 +23,7 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
             })
             .then(response => {
                 toast.success('MyTube Account created', { autoClose: 3000 })
+                getMyTubeAccounts()
             })
             .catch(error => {
                 console.log(error)
@@ -33,21 +38,34 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
             })
     }
 
+    // gets all MyTube Accounts from an user
     const getMyTubeAccounts = async () => {
-        let mytubeAccounts = {}
 
         await axios
             .get('/api/mytube-account/')
             .then(response => {
-                mytubeAccounts = response.data
-                console.log(mytubeAccounts)
+                userMyTubeAccounts.length = 0
+                response.data.map((account:object) => {
+                    userMyTubeAccounts.push(account)
+                })
             })
             .catch(error => {
                 console.log(error)
             })
-        
-        return mytubeAccounts
     }
 
-    return { createErrors, createMyTubeAccount, getMyTubeAccounts }
+    // deletes an account by an id
+    const deleteMyTubeAccount = async () => {
+        axios
+            .delete(`/api/mytube-account/${selectedAccount.value.id}/`)
+            .then(response => {
+                toast.error(`${selectedAccount.value.name} has been deleted!`)
+                getMyTubeAccounts()
+            })
+            .catch(error => {
+                toast.error('Something went wrong!')
+            })
+    }
+
+    return { createErrors, selectedAccount, userMyTubeAccounts, createMyTubeAccount, getMyTubeAccounts, deleteMyTubeAccount }
 })

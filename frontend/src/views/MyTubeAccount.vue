@@ -10,15 +10,9 @@ import ListMyTubeAccounts from '@/components/ListMyTubeAccounts.vue';
 // stores
 const myTubeAccountStore = useMyTubeAccountStore()
 
-const mytubeAccounts = ref()
-
 
 onMounted(() => {
-    const accounts = myTubeAccountStore.getMyTubeAccounts()
-
-    console.log(accounts.then((acc) => {
-        mytubeAccounts.value = acc
-    }))
+    myTubeAccountStore.getMyTubeAccounts()
 })
 
 </script>
@@ -37,12 +31,20 @@ onMounted(() => {
 
         <div>
             <h5 class="text-xl text-neutral-400 mb-3">Getting Started</h5>
-
+            <button
+            type="button"
+            class="bg-blue-700 p-3 rounded-md text-white hover:bg-blue-800"
+            data-te-toggle="modal"
+            data-te-target="#createMyTubeAccount"
+            data-te-ripple-init
+            data-te-ripple-color="light">
+            <font-awesome-icon icon="fa-solid fa-plus" /> Create MyTube Account
+            </button>
             <CreateMyTubeAccount />
 
             <h5 class="text-xl text-neutral-400 mt-3">Your MyTube Accounts</h5>
 
-            <ListMyTubeAccounts v-for="account in mytubeAccounts" :key="account.id" :account="account"/>
+            <ListMyTubeAccounts v-for="account in myTubeAccountStore.userMyTubeAccounts" :key="account.id" :account="account"/>
         </div>
    </div>
 </template>
