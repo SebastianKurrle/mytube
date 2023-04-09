@@ -29,7 +29,7 @@
           <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200">
             {{ account.description }}
           </p>
-          <button class="bg-blue-700 p-3 rounded-md text-white hover:bg-blue-800 mr-3">Go to Account</button>
+          <RouterLink :to="`/mytube-account/settings/${account.name}`" class="bg-blue-700 p-3 rounded-md text-white hover:bg-blue-800 mr-3 w-32"><font-awesome-icon icon="fa-solid fa-gear" /></RouterLink>
           <button class="bg-red-700 p-3 rounded-md text-white hover:bg-red-800 w-32"
           data-te-toggle="modal"
           data-te-target="#deleteMyTubeAccount"

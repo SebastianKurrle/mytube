@@ -4,6 +4,7 @@ from .serializers import MyTubeAccountSerializer
 from .models import MyTubeAccount
 from django.shortcuts import get_object_or_404
 from mytube.generally_permissons import IsAuthenticated
+from .permissons import IsMyTubeAccountOwner
 from users.extensions import get_user_by_token
 
 
@@ -40,3 +41,15 @@ class MyTubeAccountView(APIView):
         instance.delete()
         return Response(status=200)
 
+
+class MyTubeAccountSettingsView(APIView):
+    permission_classes = [IsAuthenticated, IsMyTubeAccountOwner]
+
+    def get(self, request, name):
+        self.check_permissions(request)
+        mt_account = MyTubeAccount.objects.get(name=name)
+        self.check_object_permissions(request, mt_account)
+
+        serializer = MyTubeAccountSerializer(mt_account)
+
+        return Response(serializer.data)

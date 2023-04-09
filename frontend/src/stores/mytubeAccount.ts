@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, reactive } from 'vue'
+import router from "@/router";
 import { toast } from "vue3-toastify";
 import type { MyTubeAccount } from "@/assets/interfaces";
 import axios from "axios";
@@ -54,6 +55,23 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
             })
     }
 
+    // gets a MyTube Account for the settings page
+    const getMyTubeAccountSettingByName = async (name:string) => {
+        let mytubeAccount = {}
+
+        await axios
+            .get(`/api/mytube-account/settings/${name}/`)
+            .then(response => {
+               mytubeAccount = response.data
+            })
+            .catch(error => {
+                toast.error('Access forbidden')
+                router.push('/')
+            })
+        
+        return mytubeAccount
+    }
+
     // deletes an account by an id
     const deleteMyTubeAccount = async () => {
         axios
@@ -67,5 +85,13 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
             })
     }
 
-    return { createErrors, selectedAccount, userMyTubeAccounts, createMyTubeAccount, getMyTubeAccounts, deleteMyTubeAccount }
+    return { 
+        createErrors, 
+        selectedAccount, 
+        userMyTubeAccounts, 
+        createMyTubeAccount, 
+        getMyTubeAccounts, 
+        getMyTubeAccountSettingByName, 
+        deleteMyTubeAccount 
+    }
 })
