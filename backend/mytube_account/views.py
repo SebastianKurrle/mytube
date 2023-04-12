@@ -47,9 +47,22 @@ class MyTubeAccountSettingsView(APIView):
 
     def get(self, request, name):
         self.check_permissions(request)
-        mt_account = MyTubeAccount.objects.get(name=name)
+        mt_account = get_object_or_404(MyTubeAccount, name=name)
         self.check_object_permissions(request, mt_account)
 
         serializer = MyTubeAccountSerializer(mt_account)
 
         return Response(serializer.data)
+
+    # updates a MyTube Account
+    def put(self, request, name):
+        self.check_permissions(request)
+        mt_account = get_object_or_404(MyTubeAccount, name=name)
+        print(mt_account)
+        self.check_object_permissions(request, mt_account)
+
+        serializer = MyTubeAccountSerializer(instance=mt_account, data=request.data, partial=True)
+        serializer.is_valid()
+        serializer.update(serializer.instance, serializer.validated_data)
+
+        return Response(status=200)

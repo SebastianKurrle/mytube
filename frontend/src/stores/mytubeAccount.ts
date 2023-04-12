@@ -1,14 +1,17 @@
 import { defineStore } from "pinia";
 import { ref, reactive } from 'vue'
-import router from "@/router";
 import { toast } from "vue3-toastify";
-import type { MyTubeAccount } from "@/assets/interfaces";
+import { useRoute } from "vue-router";
+import type { MyTubeAccount, MyTubeAccountUpdate } from "@/assets/interfaces";
+import router from "@/router";
 import axios from "axios";
 
 // handles the mytube account functions
 export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
     const createErrors = reactive(Array())
+    const updateErrors = reactive(Array())
     const userMyTubeAccounts = reactive(Array())
+
 
     // Saves the selected account from the user to delete
     const selectedAccount = ref()
@@ -27,7 +30,6 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
                 getMyTubeAccounts()
             })
             .catch(error => {
-                console.log(error)
                 if (error.response) {
                     // Loops the server errors and push it in the errors array
                     for (const property in error.response.data) {
@@ -64,12 +66,42 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
             .then(response => {
                mytubeAccount = response.data
             })
-            .catch(error => {
-                toast.error('Access forbidden')
+            .catch((error) => {
+                if (error.response.status == 404) {
+                    toast.error('404 Not Found')
+                } else {
+                    toast.error('Access Forbidden')
+                }
+
                 router.push('/')
             })
         
         return mytubeAccount
+    }
+
+    // updates a MyTube Account
+    const updateMyTubeAccount = async (updatedMyTubeAccount:MyTubeAccountUpdate, originalName:string) => {
+        updateErrors.length = 0
+
+        await axios
+            .put(`/api/mytube-account/settings/${originalName}/`, updatedMyTubeAccount, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(response => {
+                toast.success(`${updateMyTubeAccount.name} updated`, { autoClose: 3000 })
+            })
+            .catch(error => {
+                if (error.response) {
+                    // Loops the server errors and push it in the errors array
+                    for (const property in error.response.data) {
+                        updateErrors.push(
+                            `${property}: ${error.response.data[property]}`
+                        );
+                    }
+                }
+            })
     }
 
     // deletes an account by an id
@@ -86,12 +118,14 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
     }
 
     return { 
-        createErrors, 
+        createErrors,
+        updateErrors,
         selectedAccount, 
         userMyTubeAccounts, 
         createMyTubeAccount, 
         getMyTubeAccounts, 
         getMyTubeAccountSettingByName, 
+        updateMyTubeAccount,
         deleteMyTubeAccount 
     }
 })

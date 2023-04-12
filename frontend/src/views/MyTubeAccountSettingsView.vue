@@ -2,6 +2,7 @@
     import { ref, onMounted } from 'vue';
     import { useRoute } from 'vue-router';
     import { useMyTubeAccountStore } from '@/stores/mytubeAccount';
+    import type { MyTubeAccountUpdate } from '@/assets/interfaces';
 
     // stores
     const myTubeAccountStore = useMyTubeAccountStore()
@@ -15,7 +16,7 @@
 
     const name = ref()
     const description = ref()
-    const profilePicture = ref()
+    const profilePicture = ref({})
 
     const getMyTubeAccount = async () => {
         mytubeAccount.value = await myTubeAccountStore.getMyTubeAccountSettingByName(String(route.params.name))
@@ -31,6 +32,16 @@
         profilePicture.value = event.target.files[0] || {}
     }
 
+    const submitUpdateAccount = () => {
+        const data:MyTubeAccountUpdate = {
+            name: name.value,
+            description: description.value,
+            profile_picture: profilePicture.value,
+        }
+
+        myTubeAccountStore.updateMyTubeAccount(data, mytubeAccount.value.name)
+    }
+
     onMounted(() => {
         getMyTubeAccount()
     })
@@ -41,7 +52,7 @@
         <h5 class="text-3xl text-center text-white">{{ mytubeAccount.name }} Settings</h5>
 
         <div class="flex justify-center mt-3">
-            <form class="form">
+            <form class="form" @submit.prevent="submitUpdateAccount">
                 <span class="title">Settings</span>
                 <label for="name" class="label">Name</label>
                 <input type="text" id="name" required class="input" v-model="name">
@@ -53,6 +64,10 @@
                 <input type="file" id="profPic" @change="selectFile" class="input" accept="image/png, image/gif, image/jpeg">
 
                 <button type="button" class="bg-red-700 p-3 rounded-md text-white hover:bg-red-800 mb-3"><font-awesome-icon icon="fa-solid fa-trash" /> Profile Picture</button>
+
+                <div class="bg-red-800 p-3 rounded-md mb-3 text-white" v-if="myTubeAccountStore.updateErrors.length">
+                    <p v-for="error in myTubeAccountStore.updateErrors">{{ error }}</p>
+                </div>
 
                 <button type="submit" class="bg-green-700 rounded-md p-3 text-white hover:bg-green-800">
                     Update</button>

@@ -18,7 +18,8 @@
 
     const submitCreateAccount = () => {
         const data:MyTubeAccount = {
-            name:name.value,
+            id: '',
+            name: name.value,
             description: desc.value,
             profile_picture: profPic.value,
             owner: authenticatedStore.user.id

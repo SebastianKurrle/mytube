@@ -43,3 +43,17 @@ class MyTubeAccountSerializer(serializers.ModelSerializer):
             mytube_account.save()
 
         return mytube_account
+
+    # updates a MyTube Account
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name')
+        instance.description = validated_data.get('description')
+        instance.profile_picture = instance.profile_picture
+
+        if validated_data.get('profile_picture'):
+            instance.profile_picture = validated_data.get('profile_picture')
+
+        instance.save()
+
+        return instance
+

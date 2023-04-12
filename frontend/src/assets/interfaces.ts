@@ -13,10 +13,17 @@ interface UserLogin {
 }
 
 interface MyTubeAccount {
+    id:string,
     name:string,
     description:string,
     profile_picture:object,
     owner:number
 }
 
-export type { User, UserLogin, MyTubeAccount }
+interface MyTubeAccountUpdate {
+    name:string,
+    description:string,
+    profile_picture:object,
+}
+
+export type { User, UserLogin, MyTubeAccount, MyTubeAccountUpdate }
