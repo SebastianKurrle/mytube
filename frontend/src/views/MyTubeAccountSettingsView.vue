@@ -42,6 +42,10 @@
         myTubeAccountStore.updateMyTubeAccount(data, mytubeAccount.value.name)
     }
 
+    const deleteProfPic = () => {
+        myTubeAccountStore.deleteMyTubeAccountProfPic(mytubeAccount.value.name)
+    }
+
     onMounted(() => {
         getMyTubeAccount()
     })
@@ -63,7 +67,10 @@
                 <label for="profPic" class="label">Profile Picture</label>
                 <input type="file" id="profPic" @change="selectFile" class="input" accept="image/png, image/gif, image/jpeg">
 
-                <button type="button" class="bg-red-700 p-3 rounded-md text-white hover:bg-red-800 mb-3"><font-awesome-icon icon="fa-solid fa-trash" /> Profile Picture</button>
+                <button type="button"
+                @click="deleteProfPic"
+                class="bg-red-700 p-3 rounded-md text-white hover:bg-red-800 mb-3">
+                <font-awesome-icon icon="fa-solid fa-trash" /> Profile Picture</button>
 
                 <div class="bg-red-800 p-3 rounded-md mb-3 text-white" v-if="myTubeAccountStore.updateErrors.length">
                     <p v-for="error in myTubeAccountStore.updateErrors">{{ error }}</p>

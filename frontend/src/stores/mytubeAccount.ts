@@ -59,7 +59,7 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
 
     // gets a MyTube Account for the settings page
     const getMyTubeAccountSettingByName = async (name:string) => {
-        let mytubeAccount = {}
+        let mytubeAccount = null
 
         await axios
             .get(`/api/mytube-account/settings/${name}/`)
@@ -90,7 +90,10 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
                 }
             })
             .then(response => {
-                toast.success(`${updateMyTubeAccount.name} updated`, { autoClose: 3000 })
+                toast.success(`${updatedMyTubeAccount.name} updated`, { autoClose: 3000 })
+
+                // replace the old name with the new name in the url
+                router.replace({ name: 'mytube-account-settings', params: { name: updatedMyTubeAccount.name } })
             })
             .catch(error => {
                 if (error.response) {
@@ -117,6 +120,18 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
             })
     }
 
+    // deletes the profile picture from a MyTube Account
+    const deleteMyTubeAccountProfPic = async (name:string) => {
+        axios
+            .delete(`/api/mytube-account/settings/${name}/`)
+            .then(response => {
+                toast.warning('Profile picture deleted', { autoClose: 3000 })
+            })
+            .catch(error => {
+                toast.error('Something went wrong', { autoClose: 3000 })
+            })
+    }
+
     return { 
         createErrors,
         updateErrors,
@@ -126,6 +141,7 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
         getMyTubeAccounts, 
         getMyTubeAccountSettingByName, 
         updateMyTubeAccount,
-        deleteMyTubeAccount 
+        deleteMyTubeAccount,
+        deleteMyTubeAccountProfPic
     }
 })

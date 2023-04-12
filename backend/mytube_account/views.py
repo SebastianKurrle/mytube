@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from .serializers import MyTubeAccountSerializer
 from .models import MyTubeAccount
 from django.shortcuts import get_object_or_404
+from django.core.files.storage import default_storage
 from mytube.generally_permissons import IsAuthenticated
 from .permissons import IsMyTubeAccountOwner
 from users.extensions import get_user_by_token
@@ -58,7 +59,6 @@ class MyTubeAccountSettingsView(APIView):
     def put(self, request, name):
         self.check_permissions(request)
         mt_account = get_object_or_404(MyTubeAccount, name=name)
-        print(mt_account)
         self.check_object_permissions(request, mt_account)
 
         serializer = MyTubeAccountSerializer(instance=mt_account, data=request.data, partial=True)
@@ -66,3 +66,17 @@ class MyTubeAccountSettingsView(APIView):
         serializer.update(serializer.instance, serializer.validated_data)
 
         return Response(status=200)
+
+    def delete(self, request, name):
+        self.check_permissions(request)
+        mt_account = get_object_or_404(MyTubeAccount, name=name)
+        self.check_object_permissions(request, mt_account)
+
+        if mt_account.profile_picture != 'prof_pictures/default.png':
+            default_storage.delete(mt_account.profile_picture.name)
+
+        mt_account.profile_picture = 'prof_pictures/default.png'
+        mt_account.save()
+
+        return Response(status=200)
+

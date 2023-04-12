@@ -1,3 +1,4 @@
+from django.core.files.storage import default_storage
 from rest_framework import serializers, validators
 from rest_framework.exceptions import ErrorDetail
 from .models import MyTubeAccount
@@ -51,6 +52,9 @@ class MyTubeAccountSerializer(serializers.ModelSerializer):
         instance.profile_picture = instance.profile_picture
 
         if validated_data.get('profile_picture'):
+            if instance.profile_picture != 'prof_pictures/default.png':
+                default_storage.delete(instance.profile_picture.name)
+
             instance.profile_picture = validated_data.get('profile_picture')
 
         instance.save()

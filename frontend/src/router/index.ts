@@ -51,9 +51,9 @@ const router = createRouter({
       name: 'mytube-account-settings',
       component: MyTubeAccountSettingsView,
 
-      // meta: {
-      //   requireLogin: true
-      // }
+      meta: {
+        requireLogin: true
+      }
     },
   ]
 })
