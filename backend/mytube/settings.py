@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'users',
-    'mytube_account'
+    'mytube_account',
+    'video'
 ]
 
 MIDDLEWARE = [
