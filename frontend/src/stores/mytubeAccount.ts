@@ -91,9 +91,6 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
             })
             .then(response => {
                 toast.success(`${updatedMyTubeAccount.name} updated`, { autoClose: 3000 })
-
-                // replace the old name with the new name in the url
-                router.replace({ name: 'mytube-account-settings', params: { name: updatedMyTubeAccount.name } })
             })
             .catch(error => {
                 if (error.response) {

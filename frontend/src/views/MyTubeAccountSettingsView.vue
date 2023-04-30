@@ -1,8 +1,9 @@
 <script setup lang="ts">
-    import { ref, onMounted } from 'vue';
-    import { useRoute } from 'vue-router';
+    import { ref, onMounted  } from 'vue';
+    import { useRoute, onBeforeRouteUpdate } from 'vue-router';
     import { useMyTubeAccountStore } from '@/stores/mytubeAccount';
     import type { MyTubeAccountUpdate } from '@/assets/interfaces';
+    import router from "@/router";
 
     // stores
     const myTubeAccountStore = useMyTubeAccountStore()
@@ -18,8 +19,8 @@
     const description = ref()
     const profilePicture = ref({})
 
-    const getMyTubeAccount = async () => {
-        mytubeAccount.value = await myTubeAccountStore.getMyTubeAccountSettingByName(String(route.params.name))
+    const getMyTubeAccount = async (accName:string) => {
+        mytubeAccount.value = await myTubeAccountStore.getMyTubeAccountSettingByName(accName)
 
         name.value = mytubeAccount.value.name
         description.value = mytubeAccount.value.description
@@ -32,22 +33,33 @@
         profilePicture.value = event.target.files[0] || {}
     }
 
-    const submitUpdateAccount = () => {
+    const submitUpdateAccount = async () => {
         const data:MyTubeAccountUpdate = {
             name: name.value,
             description: description.value,
             profile_picture: profilePicture.value,
         }
 
+        loaded.value = false
         myTubeAccountStore.updateMyTubeAccount(data, mytubeAccount.value.name)
+        .then(() => {
+            // replace the old name with the new name in the url
+            router.replace({ name: 'mytube-account-settings', params: { name: name.value } })
+            getMyTubeAccount(name.value)
+        })
     }
 
     const deleteProfPic = () => {
         myTubeAccountStore.deleteMyTubeAccountProfPic(mytubeAccount.value.name)
     }
 
+    // gets the updated mytube accounts from the api
+    onBeforeRouteUpdate(() => {
+        myTubeAccountStore.getMyTubeAccounts()
+    })
+
     onMounted(() => {
-        getMyTubeAccount()
+        getMyTubeAccount(String(route.params.name))
     })
 </script>
 
