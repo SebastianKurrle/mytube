@@ -26,4 +26,14 @@ interface MyTubeAccountUpdate {
     profile_picture:object,
 }
 
-export type { User, UserLogin, MyTubeAccount, MyTubeAccountUpdate }
+// video
+
+interface Video {
+    name:string,
+    video:object,
+    description:string,
+    thumbnail:object,
+    mt_account:string
+}
+
+export type { User, UserLogin, MyTubeAccount, MyTubeAccountUpdate, Video }

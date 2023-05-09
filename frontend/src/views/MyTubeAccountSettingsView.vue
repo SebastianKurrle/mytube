@@ -96,7 +96,7 @@
             </form>
         </div>
 
-        <UploadVideo />
+        <UploadVideo :mtaccount="mytubeAccount"/>
     </div>
 </template>
 
