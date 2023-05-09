@@ -5,6 +5,9 @@
     import type { MyTubeAccountUpdate } from '@/assets/interfaces';
     import router from "@/router";
 
+    // components
+    import UploadVideo from '@/components/UploadVideo.vue';
+
     // stores
     const myTubeAccountStore = useMyTubeAccountStore()
 
@@ -67,7 +70,7 @@
     <div v-if="loaded">
         <h5 class="text-3xl text-center text-white">{{ mytubeAccount.name }} Settings</h5>
 
-        <div class="flex justify-center mt-3">
+        <div class="flex justify-center mt-3 mb-3">
             <form class="form" @submit.prevent="submitUpdateAccount">
                 <span class="title">Settings</span>
                 <label for="name" class="label">Name</label>
@@ -92,6 +95,8 @@
                     Update</button>
             </form>
         </div>
+
+        <UploadVideo />
     </div>
 </template>
 
