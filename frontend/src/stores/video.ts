@@ -13,6 +13,9 @@ export const useVideoStore = defineStore('video', () => {
     let offset = 0;
     let uploadedChunks = 0;
     const remainingChunks = ref(0);
+    const totalChunks = ref(0)
+
+    const currentProgress = ref(0)
 
     const uploadVideo = (video:Video) => {
         const file = video.video
@@ -51,6 +54,8 @@ export const useVideoStore = defineStore('video', () => {
                 uploadedChunks++;
                 remainingChunks.value--;
 
+                updateProgress()
+                
                 if (offset < file.size) {
                     uploadVideo(video)
                 } else {
@@ -58,6 +63,7 @@ export const useVideoStore = defineStore('video', () => {
                     offset = 0
                     uploadedChunks = 0
                     remainingChunks.value = 0
+                    totalChunks.value = 0
                 }
             })
             .catch(error => {
@@ -65,5 +71,18 @@ export const useVideoStore = defineStore('video', () => {
             })
     }
 
-    return { uploadErrors, uploadVideo, remainingChunks, chunkSize }
+    // updates the progress for the progress bar when a chunk is uploaded
+    const updateProgress = () => {
+        currentProgress.value = (uploadedChunks / totalChunks.value) * 100
+    }
+
+    return { 
+        uploadErrors, 
+        uploadVideo,
+        updateProgress, 
+        remainingChunks, 
+        chunkSize, 
+        totalChunks,
+        currentProgress
+    }
 })

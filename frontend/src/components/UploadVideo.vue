@@ -1,7 +1,10 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, onMounted } from 'vue';
     import { useVideoStore } from '@/stores/video';
     import type { Video } from '@/assets/interfaces';
+
+    // components
+    import Progressbar from './Progressbar.vue';
 
     // stores
     const videoStore = useVideoStore()
@@ -35,11 +38,16 @@
         }
 
         videoStore.remainingChunks = Math.ceil(videoFile.value.size / videoStore.chunkSize)
+        videoStore.totalChunks = videoStore.remainingChunks
         videoStore.uploadVideo(video)
 
         name.value = ''
         description.value = ''
     }
+
+    onMounted(() => {
+        videoStore.currentProgress = 0
+    })
 </script>
 
 <template>
@@ -62,6 +70,8 @@
                 <div class="bg-red-800 p-3 rounded-md mb-3 text-white" v-if="videoStore.uploadErrors.length">
                     <p v-for="error in videoStore.uploadErrors">{{ error }}</p>
                 </div>
+
+                <Progressbar />
 
                 <button type="submit" class="bg-green-700 rounded-md p-3 text-white hover:bg-green-800">
                     Upload</button>
