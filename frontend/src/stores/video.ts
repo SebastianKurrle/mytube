@@ -8,29 +8,62 @@ import axios from "axios";
 export const useVideoStore = defineStore('video', () => {
     const uploadErrors = reactive(Array())
 
+    // vars for the video upload in chunks
+    const chunkSize = ref(1024 * 1024);
+    let offset = 0;
+    let uploadedChunks = 0;
+    const remainingChunks = ref(0);
+
     const uploadVideo = (video:Video) => {
-        uploadErrors.length = 0
+        const file = video.video
+        const chunk = file.slice(offset, offset + chunkSize.value)
+
+        let data = {}
+
+        if (remainingChunks.value > 1) {
+            data = {
+                chunk: chunk,
+                remainingChunks: remainingChunks.value,
+                uploadedChunks: uploadedChunks
+            }
+        } else {
+            data = {
+                chunk: chunk,
+                remainingChunks: remainingChunks.value,
+                uploadedChunks: uploadedChunks,
+                
+                // video settings
+                name: video.name,
+                description: video.description,
+                thumbnail: video.thumbnail,
+                mt_account: video.mt_account
+            }
+        }
 
         axios
-            .post('/api/video/', video, {
+            .post('/api/video/', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
             .then(response => {
-                toast.success('Video uploaded', { autoClose: 3000 })
+                offset += chunkSize.value;
+                uploadedChunks++;
+                remainingChunks.value--;
+
+                if (offset < file.size) {
+                    uploadVideo(video)
+                } else {
+                    toast.success('Upload successfully', { autoClose: 3000 })
+                    offset = 0
+                    uploadedChunks = 0
+                    remainingChunks.value = 0
+                }
             })
             .catch(error => {
-                if (error.response) {
-                    // Loops the server errors and push it in the errors array
-                    for (const property in error.response.data) {
-                        uploadErrors.push(
-                            `${property}: ${error.response.data[property]}`
-                        );
-                    }
-                }
+                toast.error('Error on upload', { autoClose: 3000 })
             })
     }
 
-    return { uploadErrors, uploadVideo }
+    return { uploadErrors, uploadVideo, remainingChunks, chunkSize }
 })

@@ -12,7 +12,7 @@
 
     // input vars
     const name = ref('')
-    const videoFile = ref({})
+    const videoFile = ref()
     const description = ref('')
     const thumbnailFile = ref({})
 
@@ -34,6 +34,7 @@
             mt_account: mtaccount.value.id
         }
 
+        videoStore.remainingChunks = Math.ceil(videoFile.value.size / videoStore.chunkSize)
         videoStore.uploadVideo(video)
 
         name.value = ''

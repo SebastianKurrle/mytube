@@ -30,7 +30,7 @@ interface MyTubeAccountUpdate {
 
 interface Video {
     name:string,
-    video:object,
+    video:any,
     description:string,
     thumbnail:object,
     mt_account:string
