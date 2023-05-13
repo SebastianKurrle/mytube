@@ -11,9 +11,6 @@ temp_file = ''
 class VideoView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def __init__(self):
-        super().__init__()
-
     # uploads a video
     def post(self, request):
         global temp_file

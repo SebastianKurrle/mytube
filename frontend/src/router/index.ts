@@ -9,6 +9,7 @@ import SignUpView from '@/views/SignUpView.vue'
 import AccountView from '@/views/AccountView.vue'
 import MyTubeAccountView from '@/views/MyTubeAccountView.vue'
 import MyTubeAccountSettingsView from '@/views/MyTubeAccountSettingsView.vue'
+import VideoView from '@/views/VideoView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,11 @@ const router = createRouter({
       meta: {
         requireLogin: true
       }
+    },
+    {
+      path: '/video/:id',
+      name: 'video',
+      component: VideoView,
     },
     {
       path: '/mytube-account/settings/:name',
