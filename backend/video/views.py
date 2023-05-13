@@ -1,6 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import VideoSerializer
+from .models import Video
+from django.shortcuts import get_object_or_404
 from mytube.generally_permissons import IsAuthenticated
 from django.core.files.uploadedfile import SimpleUploadedFile
 import tempfile
@@ -48,3 +50,11 @@ class VideoView(APIView):
     def create_tempfile(self):
         return tempfile.NamedTemporaryFile(delete=False)
 
+
+class VideoDetailView(APIView):
+
+    def get(self, reqeust, id):
+        video = get_object_or_404(Video, id=id)
+
+        serializer = VideoSerializer(video)
+        return Response(serializer.data)

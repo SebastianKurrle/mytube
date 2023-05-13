@@ -14,7 +14,7 @@ class Video(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return f'http://localhost:5173/{self.id}'
+        return f'http://localhost:5173/video/{self.id}'
 
     def get_video(self):
         return f'http://127.0.0.1:8000{self.video.url}'
