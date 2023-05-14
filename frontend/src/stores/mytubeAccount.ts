@@ -79,6 +79,22 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
         return mytubeAccount
     }
 
+    // gets a MyTube account by id
+    const getMyTubeAccountById = async (id:string) => {
+        let mtAccount = null
+
+        await axios
+            .get(`/api/mytube-account/${id}/`)
+            .then(response => {
+                mtAccount = response.data
+            })
+            .catch(error => {
+                toast.error('Something went wrong', { autoClose: 3000 })
+            })
+        
+        return mtAccount
+    }
+
     // updates a MyTube Account
     const updateMyTubeAccount = async (updatedMyTubeAccount:MyTubeAccountUpdate, originalName:string) => {
         updateErrors.length = 0
@@ -136,7 +152,8 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
         userMyTubeAccounts, 
         createMyTubeAccount, 
         getMyTubeAccounts, 
-        getMyTubeAccountSettingByName, 
+        getMyTubeAccountSettingByName,
+        getMyTubeAccountById,
         updateMyTubeAccount,
         deleteMyTubeAccount,
         deleteMyTubeAccountProfPic
