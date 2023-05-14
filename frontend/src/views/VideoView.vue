@@ -4,7 +4,8 @@
     import { useRoute } from 'vue-router';
 
     // components
-    import Video from '@/components/Video.vue';
+    import Video from '@/components/Video/Video.vue';
+    import VideoInfo from '@/components/Video/VideoInfo.vue';
 
     const route = useRoute()
 
@@ -25,7 +26,12 @@
 
 <template>
     <div v-if="loaded">
-        <Video :url="video.video"/>
+        <div class="flex justify-center h-screen">
+            <div class="max-w-screen-lg">
+                <Video :url="video.video"/>
+                <VideoInfo :video="video"/>
+            </div>
+        </div>
     </div>
 </template>
 

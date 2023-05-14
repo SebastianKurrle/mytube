@@ -6,7 +6,7 @@ import { RouterView } from 'vue-router';
 import axios from 'axios';
 
 // components
-import Navbar from './components/Navbar.vue'
+import Navbar from './components/Navbar/Navbar.vue'
 </script>
 
 <template>

@@ -4,8 +4,8 @@ import { useMyTubeAccountStore } from '@/stores/mytubeAccount';
 import axios from 'axios';
 
 // components
-import CreateMyTubeAccount from '@/components/CreateMyTubeAccount.vue';
-import ListMyTubeAccounts from '@/components/ListMyTubeAccounts.vue';
+import CreateMyTubeAccount from '@/components/MyTubeAccount/CreateMyTubeAccount.vue';
+import ListMyTubeAccounts from '@/components/MyTubeAccount/ListMyTubeAccounts.vue';
 
 // stores
 const myTubeAccountStore = useMyTubeAccountStore()

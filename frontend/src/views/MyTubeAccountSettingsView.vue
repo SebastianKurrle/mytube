@@ -6,7 +6,7 @@
     import router from "@/router";
 
     // components
-    import UploadVideo from '@/components/UploadVideo.vue';
+    import UploadVideo from '@/components/Video/UploadVideo.vue';
 
     // stores
     const myTubeAccountStore = useMyTubeAccountStore()

@@ -2,7 +2,7 @@
     import { useAuthenticatedStore } from '@/stores/authenticated';
     
     // components
-    import UserInfo from '@/components/UserInfo.vue'
+    import UserInfo from '@/components/User/UserInfo.vue'
 
     const authenticatedStore = useAuthenticatedStore()
 </script>
