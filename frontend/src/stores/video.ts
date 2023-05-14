@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, reactive } from 'vue'
 import { toast } from "vue3-toastify";
-import type { Video } from "@/assets/interfaces";
+import type { Video, VideoCALL } from "@/assets/interfaces";
 import axios from "axios";
 
 // handles all video funktions
@@ -71,6 +71,42 @@ export const useVideoStore = defineStore('video', () => {
             })
     }
 
+    // gets a video from the api by id
+    const  getVideoByID = async (id:string) => {
+        let video:VideoCALL = {
+            id: '',
+            name: '',
+            video: '',
+            description: '',
+            thumbnail: '',
+            mt_account: '',
+            url: ''
+        }
+
+        await axios
+            .get(`/api/video/${id}/`)
+            .then(response => {
+                const data = response.data
+
+                video.id = data.id
+                video.name = data.name
+                video.video = data.get_video
+                video.description = data.description
+                video.thumbnail = data.get_thumbnail
+                video.mt_account = data.mt_account
+                video.url = data.get_absolute_url
+            })
+            .catch(error => {
+                if (error.response.status == 404) {
+                    toast.error('Video not found 404', { autoClose: 3000 })
+                } else {
+                    toast.error('Error on load', { autoClose: 3000 })
+                }
+            })
+        
+        return video
+    }
+
     // updates the progress for the progress bar when a chunk is uploaded
     const updateProgress = () => {
         currentProgress.value = (uploadedChunks / totalChunks.value) * 100
@@ -79,6 +115,7 @@ export const useVideoStore = defineStore('video', () => {
     return { 
         uploadErrors, 
         uploadVideo,
+        getVideoByID,
         updateProgress, 
         remainingChunks, 
         chunkSize, 

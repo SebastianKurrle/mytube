@@ -36,4 +36,15 @@ interface Video {
     mt_account:string
 }
 
-export type { User, UserLogin, MyTubeAccount, MyTubeAccountUpdate, Video }
+// Interface for API returned videos
+interface VideoCALL {
+    id:string,
+    name:string,
+    video:string,
+    thumbnail:string,
+    description:string,
+    mt_account:string,
+    url:string
+}
+
+export type { User, UserLogin, MyTubeAccount, MyTubeAccountUpdate, Video, VideoCALL }
