@@ -80,3 +80,12 @@ class MyTubeAccountSettingsView(APIView):
 
         return Response(status=200)
 
+
+class MyTubeAccountDetailView(APIView):
+
+    # gets a MyTube account by an id
+    def get(self, request, id):
+        mt_account = get_object_or_404(MyTubeAccount, id=id)
+
+        serializer = MyTubeAccountSerializer(mt_account)
+        return Response(serializer.data)
