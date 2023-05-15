@@ -4,12 +4,13 @@ import { useCookies } from 'vue3-cookies'
 
 // views
 import HomeView from '@/views/HomeView.vue'
-import LoginView from '@/views/LoginView.vue'
-import SignUpView from '@/views/SignUpView.vue'
-import AccountView from '@/views/AccountView.vue'
-import MyTubeAccountView from '@/views/MyTubeAccountView.vue'
-import MyTubeAccountSettingsView from '@/views/MyTubeAccountSettingsView.vue'
-import VideoView from '@/views/VideoView.vue'
+import LoginView from '@/views/User/LoginView.vue'
+import SignUpView from '@/views/User/SignUpView.vue'
+import AccountView from '@/views/User/AccountView.vue'
+import MyTubeAccountView from '@/views/MyTubeAccount/MyTubeAccountView.vue'
+import MyTubeAccountSettingsView from '@/views/MyTubeAccount/MyTubeAccountSettingsView.vue'
+import MyTubeAccountDetailView from '@/views/MyTubeAccount/MyTubeAccountDetailView.vue'
+import VideoView from '@/views/Video/VideoView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,6 +47,11 @@ const router = createRouter({
       meta: {
         requireLogin: true
       }
+    },
+    {
+      path: '/:mtaccountName',
+      name: 'mytube-account-detail',
+      component: MyTubeAccountDetailView
     },
     {
       path: '/video/:id',

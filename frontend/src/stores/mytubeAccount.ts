@@ -80,16 +80,21 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
     }
 
     // gets a MyTube account by id
-    const getMyTubeAccountById = async (id:string) => {
+    const getMyTubeAccount = async (version:string, value:string) => {
         let mtAccount = null
 
         await axios
-            .get(`/api/mytube-account/${id}/`)
+            .get(`/api/mytube-account/${version}/${value}`)
             .then(response => {
                 mtAccount = response.data
             })
             .catch(error => {
-                toast.error('Something went wrong', { autoClose: 3000 })
+                if (error.response.status == 404) {
+                    toast.error('MyTube account not found 404')
+                    router.push('/')
+                } else {
+                    toast.error('Something went wrong', { autoClose: 3000 })
+                }
             })
         
         return mtAccount
@@ -153,7 +158,7 @@ export const useMyTubeAccountStore = defineStore('mytubeAccount', () => {
         createMyTubeAccount, 
         getMyTubeAccounts, 
         getMyTubeAccountSettingByName,
-        getMyTubeAccountById,
+        getMyTubeAccount,
         updateMyTubeAccount,
         deleteMyTubeAccount,
         deleteMyTubeAccountProfPic

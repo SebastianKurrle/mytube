@@ -83,9 +83,13 @@ class MyTubeAccountSettingsView(APIView):
 
 class MyTubeAccountDetailView(APIView):
 
-    # gets a MyTube account by an id
-    def get(self, request, id):
-        mt_account = get_object_or_404(MyTubeAccount, id=id)
+    # gets a MyTube account
+    # by name or by id
+    def get(self, request, version, value):
+        if version == 'id':
+            mt_account = get_object_or_404(MyTubeAccount, id=value)
+        elif version == 'name':
+            mt_account = get_object_or_404(MyTubeAccount, name=value)
 
         serializer = MyTubeAccountSerializer(mt_account)
         return Response(serializer.data)

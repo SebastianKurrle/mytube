@@ -10,7 +10,7 @@ import Navbar from './components/Navbar/Navbar.vue'
 </script>
 
 <template>
-  <div class="h-screen bg-neutral-800">
+  <div class="h-screen main-bg">
     <header>
       <Navbar />
     </header>
