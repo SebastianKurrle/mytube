@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import VideoSerializer
 from .models import Video
+from mytube_account.models import MyTubeAccount
 from django.shortcuts import get_object_or_404
 from mytube.generally_permissons import IsAuthenticated
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -53,8 +54,20 @@ class VideoView(APIView):
 
 class VideoDetailView(APIView):
 
+    # gets a video by an id
     def get(self, reqeust, id):
         video = get_object_or_404(Video, id=id)
 
         serializer = VideoSerializer(video)
+        return Response(serializer.data)
+
+
+class VideoFromMTAccountView(APIView):
+
+    # gets all videos from a MyTubeAccount
+    def get(self, request, mt_account_id):
+        mt_account = MyTubeAccount.objects.get(id=mt_account_id)
+
+        videos = Video.objects.filter(mt_account=mt_account)
+        serializer = VideoSerializer(videos, many=True)
         return Response(serializer.data)
