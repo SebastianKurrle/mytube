@@ -107,6 +107,44 @@ export const useVideoStore = defineStore('video', () => {
         return video
     }
 
+    // gets all videos from an MyTube account
+    const getVideosFromMtAccount = async (mtAccountId:string) => {
+        let videos = Array<VideoCALL>()
+
+        await axios
+            .get(`/api/video/mtaccount/${mtAccountId}/`)
+            .then(response => {
+                const data = response.data
+                videos = dataEvaluation(data)
+            })
+            .catch(error => {
+                toast.error('Something went wrong!', { autoClose: 3000 })
+            })
+        
+        return videos
+    }
+
+    // loops over an array and evaluate it into VideoCALL objects
+    const dataEvaluation = (data:Array<any>) => {
+        let videos = Array<VideoCALL>()
+
+        data.map(d => {
+            const video:VideoCALL = {
+                id: d.id,
+                name: d.name,
+                video: d.get_video,
+                description: d.description,
+                thumbnail: d.get_thumbnail,
+                mt_account: d.mt_account,
+                url: d.get_absolute_url
+            }
+
+            videos.push(video)
+        })
+
+        return videos
+    }
+
     // updates the progress for the progress bar when a chunk is uploaded
     const updateProgress = () => {
         currentProgress.value = (uploadedChunks / totalChunks.value) * 100
@@ -116,6 +154,7 @@ export const useVideoStore = defineStore('video', () => {
         uploadErrors, 
         uploadVideo,
         getVideoByID,
+        getVideosFromMtAccount,
         updateProgress, 
         remainingChunks, 
         chunkSize, 

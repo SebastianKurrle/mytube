@@ -5,6 +5,7 @@
 
     // components
     import MtAccountInfo from '@/components/MyTubeAccount/MtAccountInfo.vue';
+    import MtAccountVideos from '@/components/Video/MtAccountVideos.vue';
 
     const route = useRoute()
 
@@ -25,6 +26,7 @@
 <template>
     <div v-if="loaded" class="text-white">
         <MtAccountInfo :mtaccount="mtaccount"/>
+        <MtAccountVideos :mtaccount="mtaccount"/>
     </div>
 </template>
 
