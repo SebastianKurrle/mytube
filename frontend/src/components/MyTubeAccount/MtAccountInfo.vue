@@ -18,14 +18,16 @@
                     <p class="text-lg text-gray-500">{{ mtaccount.description }}</p> 
                 </div>
             </div>
-
+    
             <div class="content">
                 <button class="bg-subbutton p-3 rounded-3xl text-black font-semibold hover:bg-gray-300">
                     Subscribe
                 </button>
             </div>
         </div>
-    </div>
+
+        <hr class="mt-3"/>
+    </div>    
 </template>
 
 <style scoped>
