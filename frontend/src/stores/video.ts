@@ -21,6 +21,25 @@ export const useVideoStore = defineStore('video', () => {
         const file = video.video
         const chunk = file.slice(offset, offset + chunkSize.value)
 
+        let data = createDataForUpload(video, chunk)
+
+        axios
+            .post('/api/video/', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(response => {
+                calculateUpload()
+                updateProgress()
+                checkUploadStatus(file, video)
+            })
+            .catch(error => {
+                toast.error('Error on upload', { autoClose: 3000 })
+            })
+    }
+
+    const createDataForUpload = (video:Video, chunk:any) => {
         let data = {}
 
         if (remainingChunks.value > 1) {
@@ -43,32 +62,25 @@ export const useVideoStore = defineStore('video', () => {
             }
         }
 
-        axios
-            .post('/api/video/', data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-            .then(response => {
-                offset += chunkSize.value;
-                uploadedChunks++;
-                remainingChunks.value--;
+        return data
+    }
 
-                updateProgress()
-                
-                if (offset < file.size) {
-                    uploadVideo(video)
-                } else {
-                    toast.success('Upload successfully', { autoClose: 3000 })
-                    offset = 0
-                    uploadedChunks = 0
-                    remainingChunks.value = 0
-                    totalChunks.value = 0
-                }
-            })
-            .catch(error => {
-                toast.error('Error on upload', { autoClose: 3000 })
-            })
+    const calculateUpload = () => {
+        offset += chunkSize.value;
+        uploadedChunks++;
+        remainingChunks.value--;
+    }
+
+    const checkUploadStatus = (file:any, video:Video) => {
+        if (offset < file.size) {
+            uploadVideo(video)
+        } else {
+            toast.success('Upload successfully', { autoClose: 3000 })
+            offset = 0
+            uploadedChunks = 0
+            remainingChunks.value = 0
+            totalChunks.value = 0
+        }
     }
 
     // gets a video from the api by id
