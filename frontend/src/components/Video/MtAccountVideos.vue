@@ -26,12 +26,14 @@
 </script>
 
 <template>
-    <div v-if="loaded" class="mt-3 md:flex">
-        <div class="max-w-md rounded overflow-hidden ml-3" v-for="video in videos">
+    <div v-if="loaded" class="mt-3 video-container">
+        <div class="max-w-md rounded overflow-hidden video-item" v-for="video in videos">
             <RouterLink :to="{ name: 'video', params: {id: video.id} }">
-                <img class="w-full" :src="video.thumbnail">
+                <div class="thumbnail-preview">
+                    <img class="w-full object-cover overflow-hidden" :src="video.thumbnail">
+                </div>
                 <div class="px-6 py-4">
-                    <div class="font-bold text-xl mb-2">{{ video.name }}</div>
+                    <div class="font-bold text-base mb-2">{{ video.name }}</div>
                 </div>
             </RouterLink>
         </div>  
@@ -39,4 +41,24 @@
 </template>
 
 <style scoped>
+.thumbnail-preview {
+  width: 320px;
+  height: 180px;
+  overflow: hidden;
+}
+
+.thumbnail-preview img {
+  width: 100%;
+  height: auto;
+}
+
+.video-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.video-item {
+  width: 25%;
+  box-sizing: border-box;
+}
 </style>
