@@ -32,8 +32,8 @@
                 <div class="thumbnail-preview">
                     <img class="w-full object-cover overflow-hidden" :src="video.thumbnail">
                 </div>
-                <div class="px-6 py-4">
-                    <div class="font-bold text-base mb-2">{{ video.name }}</div>
+                <div class="py-4">
+                    <div class="font-bold text-base mb-2 break-words w-80">{{ video.name }}</div>
                 </div>
             </RouterLink>
         </div>  
@@ -41,42 +41,5 @@
 </template>
 
 <style scoped>
-.thumbnail-preview {
-  width: 320px;
-  height: 180px;
-  overflow: hidden;
-}
-
-.thumbnail-preview img {
-  width: 100%;
-  height: auto;
-}
-
-.video-container {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-@media (min-width: 700px) {
-    
-    .video-item {
-        width: 50%;
-        box-sizing: border-box;
-    }
-}
-
-@media (min-width: 1300px) {    
-    .video-item {
-        width: 30%;
-        box-sizing: border-box;
-    }
-}
-
-@media (min-width: 1600px) { 
-    .video-item {
-        width: 25%;
-        box-sizing: border-box;
-    }
-}
-
+@import url("@/assets/style/videos-mtaccount.css");
 </style>
