@@ -17,6 +17,7 @@ export const useVideoStore = defineStore('video', () => {
 
     const currentProgress = ref(0)
 
+    // Uploads a video in chunks
     const uploadVideo = (video:Video) => {
         const file = video.video
         const chunk = file.slice(offset, offset + chunkSize.value)
@@ -39,6 +40,11 @@ export const useVideoStore = defineStore('video', () => {
             })
     }
 
+    /*
+    Creat the data for the upload
+    When the last chunk is going to be uploaded the data will also include the video data
+    to finish the upload
+    */
     const createDataForUpload = (video:Video, chunk:any) => {
         let data = {}
 
@@ -65,12 +71,17 @@ export const useVideoStore = defineStore('video', () => {
         return data
     }
 
+    //Calculates the new offset and the chunk vars
     const calculateUpload = () => {
         offset += chunkSize.value;
         uploadedChunks++;
         remainingChunks.value--;
     }
 
+    /*
+    Checks the status of the current upload if the upload isn`t finshed
+    it will continue the upload otherwise it resets all uploads vars
+    */
     const checkUploadStatus = (file:any, video:Video) => {
         if (offset < file.size) {
             uploadVideo(video)
