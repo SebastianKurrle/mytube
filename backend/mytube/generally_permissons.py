@@ -10,7 +10,7 @@ class IsAuthenticated(BasePermission):
     def has_permission(self, request, view):
         try:
             token = request.headers['Authorization'].split(' ')[1]
-        except IndexError:
+        except KeyError:
             raise AuthenticationFailed('Unauthenticated')
 
         try:

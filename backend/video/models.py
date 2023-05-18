@@ -8,6 +8,8 @@ class Video(models.Model):
     video = models.FileField(upload_to='videos/')
     description = models.TextField(null=True)
     thumbnail = models.ImageField(upload_to='videos-thumbnails/')
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
     mt_account = models.ForeignKey(MyTubeAccount, on_delete=models.CASCADE)
 
     def __str__(self):

@@ -71,3 +71,28 @@ class VideoFromMTAccountView(APIView):
         videos = Video.objects.filter(mt_account=mt_account)
         serializer = VideoSerializer(videos, many=True)
         return Response(serializer.data)
+
+
+class VideoEvaluationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, id):
+        self.check_permissions(request)
+        video = get_object_or_404(Video, id=id)
+
+        version = request.query_params['v']
+        self.evaluate_video(version, video)
+
+        return Response(status=200)
+
+    def evaluate_video(self, version, video):
+        if version == 'like':
+            video.likes += 1
+        elif version == 'dislike':
+            video.dislikes += 1
+        elif version == 'r-like':
+            video.likes -= 1
+        elif version == 'r-dislike':
+            video.dislikes -= 1
+
+        video.save()
