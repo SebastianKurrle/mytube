@@ -14,7 +14,7 @@ temp_file = ''
 class VideoView(APIView):
     permission_classes = [IsAuthenticated]
 
-    # uploads a video
+    # uploads a video in chunks and saves it in a temporary file
     def post(self, request):
         global temp_file
         self.check_permissions(request)
@@ -28,26 +28,36 @@ class VideoView(APIView):
             file.write(chunk_data.read())
 
         if int(request.data['remainingChunks']) == 1:
-            with open(temp_file, 'rb') as f:
-                data = f.read()
-                video = SimpleUploadedFile(f'{os.path.basename(temp_file)}.mp4', data)
-
-            data = {
-                'name': request.data['name'],
-                'video': video,
-                'description': request.data['description'],
-                'thumbnail': request.data['thumbnail'],
-                'mt_account': request.data['mt_account']
-            }
-
-            serializer = VideoSerializer(data=data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-
-            os.remove(temp_file)
+            data = self.create_video_data(request)
+            self.save_video(data)
 
         return Response(status=200)
 
+    # Create the data to save to video when the upload is completed
+    def create_video_data(self, request):
+        with open(temp_file, 'rb') as f:
+            data = f.read()
+            video = SimpleUploadedFile(f'{os.path.basename(temp_file)}.mp4', data)
+
+        data = {
+            'name': request.data['name'],
+            'video': video,
+            'description': request.data['description'],
+            'thumbnail': request.data['thumbnail'],
+            'mt_account': request.data['mt_account']
+        }
+
+        return data
+
+    # Saves the video when the upload is completed
+    def save_video(self, data):
+        serializer = VideoSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        os.remove(temp_file)
+
+    # Create a temporary file
     def create_tempfile(self):
         return tempfile.NamedTemporaryFile(delete=False)
 
@@ -85,6 +95,7 @@ class VideoEvaluationView(APIView):
 
         return Response(status=200)
 
+    # Checks what version in the query params of the request is selected
     def evaluate_video(self, version, video):
         if version == 'like':
             video.likes += 1
