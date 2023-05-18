@@ -53,12 +53,30 @@
 }
 
 .video-container {
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
-.video-item {
-  width: 25%;
-  box-sizing: border-box;
+@media (min-width: 700px) {
+    
+    .video-item {
+        width: 50%;
+        box-sizing: border-box;
+    }
 }
+
+@media (min-width: 1300px) {    
+    .video-item {
+        width: 30%;
+        box-sizing: border-box;
+    }
+}
+
+@media (min-width: 1600px) { 
+    .video-item {
+        width: 25%;
+        box-sizing: border-box;
+    }
+}
+
 </style>
