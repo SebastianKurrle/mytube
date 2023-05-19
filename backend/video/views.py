@@ -102,6 +102,26 @@ class VideoEvaluationView(APIView):
 
         return Response(status=200)
 
+    def get(self, request, id):
+        self.check_permissions(request)
+        video = get_object_or_404(Video, id=id)
+
+        token = request.headers['Authorization'].split(' ')[1]
+        user = get_user_by_token(token)
+
+        evaluation = self.check_evaluation(video, user)
+
+        return Response(evaluation)
+
+    # Checks if and user has liked, disliked or not evaluated a video
+    def check_evaluation(self, video, user):
+        evaluation = Evaluate.objects.filter(video=video, user=user)
+        if evaluation:
+            return evaluation[0].evaluate
+
+        # Returns empty string if a user has not evaluated a video
+        return ''
+
     # Checks what version in the query params of the request is selected
     # and saves the evaluation in the database
     def evaluate_video(self, version, video, user):

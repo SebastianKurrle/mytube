@@ -17,6 +17,10 @@ export const useVideoStore = defineStore('video', () => {
 
     const currentProgress = ref(0)
 
+    /* 
+        Upload Vidoes
+    */
+
     // Uploads a video in chunks
     const uploadVideo = (video:Video) => {
         const file = video.video
@@ -94,6 +98,10 @@ export const useVideoStore = defineStore('video', () => {
         }
     }
 
+    /* 
+        Get Videos
+    */
+    
     // gets a video from the api by id
     const  getVideoByID = async (id:string) => {
         let video:VideoCALL = {
@@ -173,12 +181,37 @@ export const useVideoStore = defineStore('video', () => {
         currentProgress.value = (uploadedChunks / totalChunks.value) * 100
     }
 
+    /* 
+        Video evaluation
+    */
+
+    /* 
+        This function checks if a user liked, disliked or not evaluated a video
+        If the user liked a video it returns 0 and if the user disliked a video it returns 1
+        otherwise it returns an empty string
+    */
+    const checkUserVideoEvaluation = async (videoID:string) => {
+        let result = ''
+
+        await axios
+            .get(`/api/video/${videoID}/evaluate/`)
+            .then(response => {
+                result = response.data
+            })
+            .catch(error => {
+                toast.error('Something went wrong', { autoClose: 3000 })
+            })
+        
+        return result
+    }
+
     return { 
         uploadErrors, 
         uploadVideo,
         getVideoByID,
         getVideosFromMtAccount,
-        updateProgress, 
+        updateProgress,
+        checkUserVideoEvaluation,
         remainingChunks, 
         chunkSize, 
         totalChunks,

@@ -16,7 +16,7 @@
             <h5 class="text-xl font-semibold">{{ video.name }}</h5>
             <div class="video-info">
                 <MtAccountBox :mtaccountID="video.mt_account"/>
-                <EvaluateVideo />
+                <EvaluateVideo :video="video"/>
             </div>
         </div>
 
