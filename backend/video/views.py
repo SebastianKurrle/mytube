@@ -1,15 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import VideoSerializer
-from .models import Video
+from .serializers import VideoSerializer, EvaluateSerializer
+from .models import Video, Evaluate
+from users.extensions import get_user_by_token
 from mytube_account.models import MyTubeAccount
 from django.shortcuts import get_object_or_404
 from mytube.generally_permissons import IsAuthenticated
 from django.core.files.uploadedfile import SimpleUploadedFile
-import tempfile
-import os
+import os, tempfile
 
 temp_file = ''
+
 
 class VideoView(APIView):
     permission_classes = [IsAuthenticated]
@@ -90,20 +91,66 @@ class VideoEvaluationView(APIView):
         self.check_permissions(request)
         video = get_object_or_404(Video, id=id)
 
+        token = request.headers['Authorization'].split(' ')[1]
+        user = get_user_by_token(token)
+
         version = request.query_params['v']
-        self.evaluate_video(version, video)
+        res = self.evaluate_video(version, video, user)
+
+        if not res:
+            return Response(status=400)
 
         return Response(status=200)
 
     # Checks what version in the query params of the request is selected
-    def evaluate_video(self, version, video):
-        if version == 'like':
-            video.likes += 1
-        elif version == 'dislike':
-            video.dislikes += 1
-        elif version == 'r-like':
-            video.likes -= 1
-        elif version == 'r-dislike':
-            video.dislikes -= 1
+    # and saves the evaluation in the database
+    def evaluate_video(self, version, video, user):
+        data = self.create_evaluate_data(version, video, user)
 
-        video.save()
+        if isinstance(data, dict):
+            if data != {}:
+                serializer = EvaluateSerializer(data=data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+
+            return True
+
+        return False
+
+    # Creates the data for the serializer to evaluate a video
+    # When the user wants to remove a like or a dislike the method returns an empty {}
+    # When nothing fits the conditions it returns False
+    def create_evaluate_data(self, version, video, user):
+        video_likes = Evaluate.objects.filter(video=video, evaluate=0, user=user)
+        video_dislikes = Evaluate.objects.filter(video=video, evaluate=1, user=user)
+
+        data = {
+            'video': video.id,
+            'user': user.id
+        }
+
+        if version == 'like' and not video_likes and not video_dislikes:
+            data.update({
+                'evaluate': 0
+            })
+
+            return data
+
+        if version == 'dislike' and not video_dislikes and not video_likes:
+            data.update({
+                'evaluate': 1
+            })
+
+            return data
+
+        if version == 'r-like' and len(video_likes) == 1:
+            like = video_likes[0]
+            like.delete()
+            return {}
+
+        if version == 'r-dislike' and len(video_dislikes) == 1:
+            dislike = video_dislikes[0]
+            dislike.delete()
+            return {}
+
+        return False

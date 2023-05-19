@@ -1,12 +1,6 @@
-import random
-
 from rest_framework import serializers
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from .models import Video
+from .models import Video, Evaluate
 from uuid import uuid4
-from PIL import Image
-from io import BytesIO
-from random import getrandbits
 
 
 class VideoSerializer(serializers.ModelSerializer):
@@ -20,8 +14,6 @@ class VideoSerializer(serializers.ModelSerializer):
             'video',
             'description',
             'thumbnail',
-            'likes',
-            'dislikes',
             'mt_account',
             'get_absolute_url',
             'get_video',
@@ -38,4 +30,20 @@ class VideoSerializer(serializers.ModelSerializer):
         mt_account = validated_data.get('mt_account')
 
         video = Video.objects.create(id=id, name=name, video=video, description=description, thumbnail=thumbnail, mt_account=mt_account)
+
         return video
+
+
+class EvaluateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Evaluate
+        fields = (
+            '__all__'
+        )
+
+    def create(self, validated_data):
+        id = uuid4()
+
+        evaluate = Evaluate.objects.create(id=id, **validated_data)
+        return evaluate
