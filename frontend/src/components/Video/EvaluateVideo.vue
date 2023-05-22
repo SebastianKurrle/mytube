@@ -2,12 +2,14 @@
     import { ref, onMounted, computed } from 'vue';
     import { useAuthenticatedStore } from '@/stores/authenticated';
     import { useVideoStore } from '@/stores/video';
+    import { useEvaluateStore } from '@/stores/evaluateStore';
 
     const props = defineProps(['video'])
 
     // stores
     const authenticatedStore = useAuthenticatedStore()
     const videoStore = useVideoStore()
+    const evaluateStore = useEvaluateStore()
 
     const video = ref(props.video)
 
@@ -29,17 +31,27 @@
         }
     });
 
+    const likeVideo = async () => {
+        await evaluateStore.likeVideo(String(video.value.id), userEvaluateStatus.value)
+        userEvaluateStatus.value = await evaluateStore.checkUserVideoEvaluation(String(video.value.id))
+    }
+
+    const dislikeVideo = async () => {
+        await evaluateStore.dislikeVideo(String(video.value.id), userEvaluateStatus.value)
+        userEvaluateStatus.value = await evaluateStore.checkUserVideoEvaluation(String(video.value.id))
+    }
+
     onMounted(async () => {
         if (authenticatedStore.authenticated) {
-            userEvaluateStatus.value = await videoStore.checkUserVideoEvaluation(String(video.value.id))
+            userEvaluateStatus.value = await evaluateStore.checkUserVideoEvaluation(String(video.value.id))
         }
     })
 </script>
 
 <template>
     <div>
-        <button><font-awesome-icon :icon="likeIcon" class="text-2xl mr-3"/></button>
-        <button><font-awesome-icon :icon="dislikeIcon" class="text-2xl"/></button>
+        <button @click="likeVideo"><font-awesome-icon :icon="likeIcon" class="text-2xl mr-3"/></button>
+        <button @click="dislikeVideo"><font-awesome-icon :icon="dislikeIcon" class="text-2xl"/></button>
     </div>
 </template>
 
