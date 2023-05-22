@@ -11,7 +11,7 @@
 </script>
 
 <template>
-    <div class="text-white">
+    <div class="text-white p-3">
         <div class="mt-3">
             <h5 class="text-xl font-semibold">{{ video.name }}</h5>
             <div class="video-info">
@@ -31,9 +31,11 @@
     background-color: #3F3F3F;
 }
 
-.video-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+@media (min-width: 700px) {
+    .video-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 }
 </style>

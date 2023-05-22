@@ -67,7 +67,7 @@
 </script>
 
 <template>
-    <div v-if="loaded">
+    <div v-if="loaded" class="p-3">
         <h5 class="text-3xl text-center text-white">{{ mytubeAccount.name }} Settings</h5>
 
         <div class="flex justify-center mt-3 mb-3">

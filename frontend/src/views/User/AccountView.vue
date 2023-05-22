@@ -8,7 +8,7 @@
 </script>
 
 <template>
-    <div>
+    <div class="p-3">
         <h5 class="text-3xl text-white text-center">Your Account</h5>
 
         <div>

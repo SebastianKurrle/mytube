@@ -36,7 +36,7 @@ const submitSignUp = () => {
 </script>
 
 <template>
-    <div>
+    <div class="p-3">
         <div class="flex justify-center mt-3">
             <form class="form" @submit.prevent="submitSignUp">
                 <span class="title">Sign Up</span>

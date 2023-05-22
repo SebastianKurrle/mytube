@@ -15,7 +15,7 @@ import Navbar from './components/Navbar/Navbar.vue'
       <Navbar />
     </header>
 
-    <main class="container m-auto mt-3">
+    <main class="mt-3 md:container md:m-auto">
       <RouterView />
     </main>
   </div>

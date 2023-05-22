@@ -174,3 +174,20 @@ class VideoEvaluationView(APIView):
             return {}
 
         return False
+
+
+class VideoEvaluationCountView(APIView):
+
+    # counts the likes and the dislikes from a video and returns it at response
+    def get(self, request, id):
+        video = get_object_or_404(Video, id=id)
+
+        video_likes = Evaluate.objects.filter(video=video, evaluate='0').count()
+        video_dislikes = Evaluate.objects.filter(video=video, evaluate='1').count()
+
+        data = {
+            'likes': video_likes,
+            'dislikes': video_dislikes
+        }
+
+        return Response(data)

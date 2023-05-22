@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-   <div>
+   <div class="p-3">
         <h4 class="text-3xl text-center text-white">MyTube Accounts</h4>
 
         <div class="border rounded-md mt-3 p-3 text-white mb-3">

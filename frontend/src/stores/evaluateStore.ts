@@ -24,6 +24,31 @@ export const useEvaluateStore = defineStore('evaluate', () => {
         return result
     }
 
+    /*
+        The function gets a video id and makes a http get request to the api
+        the api response with the count of likes and dislikes from the video
+        The function returns the likes and dislikes in an object
+    */
+    const getVideoEvaluationCount = async (videoID:string) => {
+        const result = {
+            likes: 0,
+            dislikes: 0
+        }
+
+        await axios
+            .get(`/api/video/${videoID}/evaluate/count/`)
+            .then(response => {
+                const data = response.data
+                result.likes = data.likes
+                result.dislikes = data.dislikes
+            })
+            .catch(error => {
+                toast.error('Something went wrong', { autoClose: 3000 })
+            })
+        
+        return result
+    }
+
     /* 
         This function gets a video id and a evaluation status from a user
         evaluateStatus '0' means the user have already liked the video
@@ -87,6 +112,7 @@ export const useEvaluateStore = defineStore('evaluate', () => {
 
     return {
         checkUserVideoEvaluation,
+        getVideoEvaluationCount,
         likeVideo,
         dislikeVideo
     }
