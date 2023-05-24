@@ -25,7 +25,7 @@
 </script>
 
 <template>
-    <div v-if="loaded">
+    <div v-if="loaded" class="mt-3">
         <div class="flex justify-center h-screen">
             <div class="max-w-screen-lg">
                 <Video :url="video.video"/>

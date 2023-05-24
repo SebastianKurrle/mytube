@@ -1,14 +1,12 @@
 <script setup lang="ts">
     import { ref, onMounted, computed } from 'vue';
     import { useAuthenticatedStore } from '@/stores/authenticated';
-    import { useVideoStore } from '@/stores/video';
     import { useEvaluateStore } from '@/stores/evaluateStore';
 
     const props = defineProps(['video'])
 
     // stores
     const authenticatedStore = useAuthenticatedStore()
-    const videoStore = useVideoStore()
     const evaluateStore = useEvaluateStore()
 
     const video = ref(props.video)
@@ -71,12 +69,14 @@
 
 <template>
     <div v-if="loaded" class="mt-3">
-        <div class="p-3 rounded-3xl button-bg w-32 layout-buttons md:w-40">
+        <div class="p-3 rounded-3xl button-bg w-56 layout-buttons md:w-64">
             <div>
-                <button @click="likeVideo"><font-awesome-icon :icon="likeIcon" class="text-2xl mr-3"/></button> <span>{{ videoEvaluate.likes }}</span>
+                <button @click="likeVideo"><font-awesome-icon :icon="likeIcon" class="text-lg mr-3 md:text-2xl"/></button>
+                <span class="text-sm md:text-lg">{{ videoEvaluate.likes }}</span>
             </div>
             <div>
-                <button @click="dislikeVideo"><font-awesome-icon :icon="dislikeIcon" class="text-2xl"/></button> <span>{{ videoEvaluate.dislikes }}</span>
+                <button @click="dislikeVideo"><font-awesome-icon :icon="dislikeIcon" class="text-lg mr-3 md:text-2xl"/></button>
+                <span class="text-sm md:text-lg">{{ videoEvaluate.dislikes }}</span>
             </div>
         </div>
     </div>
