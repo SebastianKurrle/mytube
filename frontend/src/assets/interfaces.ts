@@ -47,4 +47,11 @@ interface VideoCALL {
     url:string
 }
 
-export type { User, UserLogin, MyTubeAccount, MyTubeAccountUpdate, Video, VideoCALL }
+// Comment interface to post a comment video and user type string is the id
+interface Comment {
+    message:string,
+    video:string,
+    user:string
+}
+
+export type { User, UserLogin, MyTubeAccount, MyTubeAccountUpdate, Video, VideoCALL, Comment }

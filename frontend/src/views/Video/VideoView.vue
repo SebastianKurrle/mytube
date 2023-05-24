@@ -6,6 +6,7 @@
     // components
     import Video from '@/components/Video/Video.vue';
     import VideoInfo from '@/components/Video/VideoInfo.vue';
+    import Comments from "@/components/Video/comments/Comments.vue";
 
     const route = useRoute()
 
@@ -30,6 +31,7 @@
             <div class="max-w-screen-lg">
                 <Video :url="video.video"/>
                 <VideoInfo :video="video"/>
+                <Comments :video="video"/>
             </div>
         </div>
     </div>
