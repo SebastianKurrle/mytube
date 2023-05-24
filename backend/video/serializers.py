@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Video, Evaluate
+from .models import Video, Evaluate, Comment
 from uuid import uuid4
 
 
@@ -47,3 +47,18 @@ class EvaluateSerializer(serializers.ModelSerializer):
 
         evaluate = Evaluate.objects.create(id=id, **validated_data)
         return evaluate
+
+
+class CommentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = (
+            '__all__'
+        )
+
+    def create(self, validated_data):
+        id = uuid4()
+
+        comment = Comment.objects.create(id=id, **validated_data)
+        return comment

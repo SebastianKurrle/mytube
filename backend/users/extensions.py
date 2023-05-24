@@ -5,9 +5,10 @@ from rest_framework.exceptions import AuthenticationFailed
 import jwt
 
 
-def get_user_by_token(token):
+def get_user_by_token(request):
 
     try:
+        token = request.headers['Authorization'].split(' ')[1]
         payload = jwt.decode(token, 'secret', algorithms=['HS256'])
 
         user = User.objects.filter(id=payload['id']).first()

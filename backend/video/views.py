@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import VideoSerializer, EvaluateSerializer
+from .serializers import VideoSerializer, EvaluateSerializer, CommentSerializer
 from .models import Video, Evaluate
 from users.extensions import get_user_by_token
 from mytube_account.models import MyTubeAccount
@@ -91,8 +91,7 @@ class VideoEvaluationView(APIView):
         self.check_permissions(request)
         video = get_object_or_404(Video, id=id)
 
-        token = request.headers['Authorization'].split(' ')[1]
-        user = get_user_by_token(token)
+        user = get_user_by_token(request)
 
         version = request.query_params['v']
         res = self.evaluate_video(version, video, user)
@@ -106,8 +105,7 @@ class VideoEvaluationView(APIView):
         self.check_permissions(request)
         video = get_object_or_404(Video, id=id)
 
-        token = request.headers['Authorization'].split(' ')[1]
-        user = get_user_by_token(token)
+        user = get_user_by_token(request)
 
         evaluation = self.check_evaluation(video, user)
 
@@ -191,3 +189,16 @@ class VideoEvaluationCountView(APIView):
         }
 
         return Response(data)
+
+
+class CommentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        self.check_permissions(request)
+
+        serializer = CommentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)

@@ -6,8 +6,6 @@ class IsMyTubeAccountOwner(BasePermission):
 
     # Checks if a user is owner of an MyTube account
     def has_object_permission(self, request, view, obj):
-        token = request.headers['Authorization'].split(' ')[1]
-
-        user = get_user_by_token(token)
+        user = get_user_by_token(request)
 
         return user == obj.owner

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from mytube_account.models import MyTubeAccount
 from users.models import User
 
@@ -32,6 +33,17 @@ class Evaluate(models.Model):
 
     id = models.CharField(primary_key=True, editable=False, max_length=255)
     evaluate = models.CharField(choices=EVALUATE_CHOICES, max_length=255)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.id)
+
+
+class Comment(models.Model):
+    id = models.CharField(primary_key=True, editable=False, max_length=255)
+    message = models.TextField()
+    datetime_posted = models.DateTimeField(default=timezone.now)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 

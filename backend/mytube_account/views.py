@@ -24,8 +24,7 @@ class MyTubeAccountView(APIView):
 
     # gets all mytube accounts from a user
     def get(self, request):
-        token = request.headers['Authorization'].split(' ')[1]
-        user = get_user_by_token(token)
+        user = get_user_by_token(request)
 
         mytube_accounts = MyTubeAccount.objects.filter(owner=user)
         serializer = MyTubeAccountSerializer(mytube_accounts, many=True)
