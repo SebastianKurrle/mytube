@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { toast } from "vue3-toastify";
 import type { Comment } from "@/assets/interfaces";
 import axios from "axios";
+import {comment} from "postcss";
 
 export const useCommentStore = defineStore('comment', () => {
 
@@ -19,7 +20,27 @@ export const useCommentStore = defineStore('comment', () => {
             })
     }
 
+    const getLatestComments = async (datetime:string, currentLoadedComments:Array<object>, videoID:string):Promise<Array<object>> => {
+        const newComments = currentLoadedComments
+
+        await axios
+            .get(`/api/video/${videoID}/comments/?start_datetime=${datetime}`)
+            .then(response => {
+                const data = Array(response.data)
+
+                data.map(comment => {
+                    newComments.push(comment)
+                })
+            })
+            .catch(error => {
+                toast.error('Something went wrong', { autoClose: 3000 })
+            })
+
+        return newComments
+    }
+
     return {
-        postComment
+        postComment,
+        getLatestComments
     }
 })
