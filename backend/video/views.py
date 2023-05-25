@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import VideoSerializer, EvaluateSerializer, CommentSerializer
-from .models import Video, Evaluate
+from .serializers import VideoSerializer, EvaluateSerializer, CommentSerializer, CommentGETSerializer
+from .models import Video, Evaluate, Comment
 from users.extensions import get_user_by_token
 from mytube_account.models import MyTubeAccount
 from django.shortcuts import get_object_or_404
@@ -202,3 +202,27 @@ class CommentView(APIView):
         serializer.save()
 
         return Response(serializer.data)
+
+
+class CommentLoadView(APIView):
+
+    """
+        The function returns 5 comments from a video depends on the datetime
+        hand over by the query params if the param equals now it returns the 5 newest
+        comments if the param is a datetime it returns the 5 newest away from this datetime
+    """
+    def get(self, request, id):
+        video = get_object_or_404(Video, id=id)
+
+        query = request.query_params['start_datetime']
+
+        if query == 'now':
+            comments = Comment.objects.filter(video=video).order_by('-datetime_posted')[:5]
+        else:
+            start_datetime = query
+            comments = Comment.objects.filter(datetime_posted__gt=start_datetime, video=video)[:5]
+
+        serializer = CommentGETSerializer(comments, many=True)
+
+        return Response(serializer.data)
+

@@ -2,6 +2,7 @@
     import { ref, onMounted, computed } from 'vue';
     import { useAuthenticatedStore } from '@/stores/authenticated';
     import { useEvaluateStore } from '@/stores/evaluateStore';
+    import router from "@/router";
 
     const props = defineProps(['video'])
 
@@ -18,6 +19,7 @@
     })
 
 
+    // returns the fontawesome classes for the like button depends on the evaluation status (like, dislike)
     const likeIcon = computed(() => {
         if (userEvaluateStatus.value === '0') {
             return ['fas', 'thumbs-up']; // fa-solid thumbs-up icon
@@ -26,6 +28,7 @@
         }
     });
 
+    // returns the fontawesome classes for the dislike button depends on the evaluation status (like, dislike)
     const dislikeIcon = computed(() => {
         if (userEvaluateStatus.value === '1') {
             return ['fas', 'thumbs-down']; // fa-solid thumbs-down icon
@@ -34,20 +37,31 @@
         }
     });
 
+    // Handles the like button click if the user is authenticated
     const likeVideo = async () => {
-        await evaluateStore.likeVideo(String(video.value.id), userEvaluateStatus.value)
-        userEvaluateStatus.value = await evaluateStore.checkUserVideoEvaluation(String(video.value.id))
+        if (authenticatedStore.authenticated) {
+          await evaluateStore.likeVideo(String(video.value.id), userEvaluateStatus.value)
+          userEvaluateStatus.value = await evaluateStore.checkUserVideoEvaluation(String(video.value.id))
 
-        await evaluationCount()
+          await evaluationCount()
+        } else {
+          router.push({name: 'login'})
+        }
     }
 
+    // Handles the dislike button click if the user is authenticated
     const dislikeVideo = async () => {
-        await evaluateStore.dislikeVideo(String(video.value.id), userEvaluateStatus.value)
-        userEvaluateStatus.value = await evaluateStore.checkUserVideoEvaluation(String(video.value.id))
+        if (authenticatedStore.authenticated) {
+          await evaluateStore.dislikeVideo(String(video.value.id), userEvaluateStatus.value)
+          userEvaluateStatus.value = await evaluateStore.checkUserVideoEvaluation(String(video.value.id))
 
-        await evaluationCount()
+          await evaluationCount()
+        } else {
+          router.push({name: 'login'})
+        }
     }
 
+    // counts the likes and dislikes from the video
     const evaluationCount = async () => {
         const result = await evaluateStore.getVideoEvaluationCount(video.value.id)
 

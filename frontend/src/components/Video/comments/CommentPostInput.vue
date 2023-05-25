@@ -26,7 +26,7 @@
 </script>
 
 <template>
-  <div class="mx-auto mt-3">
+  <div class="mx-auto mt-3" v-if="authenticatedStore.authenticated">
     <form @submit.prevent="postComment">
       <div class="relative">
         <textarea placeholder="Add Comment..." class="bg-input text-white w-full

@@ -19,7 +19,7 @@
         <span class="font-semibold mr-3">{{ comment.user.name }}</span>
         <span class="text-sm text-gray-600">{{ getTimeAgoFromComment(comment.datetime_posted) }}</span>
       </p>
-      <p>{{ comment.message }}</p>
+      <p class="break-words">{{ comment.message }}</p>
     </div>
   </div>
 </template>

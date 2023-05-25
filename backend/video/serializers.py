@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Video, Evaluate, Comment
+from users.serializers import UserSerializer
 from uuid import uuid4
 
 
@@ -53,12 +54,24 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = (
-            '__all__'
-        )
+        fields = '__all__'
 
     def create(self, validated_data):
         id = uuid4()
 
         comment = Comment.objects.create(id=id, **validated_data)
         return comment
+
+
+class CommentGETSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Comment
+        fields = (
+            'id',
+            'message',
+            'datetime_posted',
+            'video',
+            'user'
+        )

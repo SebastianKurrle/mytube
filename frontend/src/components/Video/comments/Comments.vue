@@ -44,6 +44,10 @@
     })
   }
 
+  const commend = () => {
+    console.log('test')
+  }
+
   onMounted(async () => {
     window.addEventListener('scroll', () => {
       if (route.name === 'video') {
