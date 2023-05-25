@@ -1,4 +1,5 @@
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import VideoSerializer, EvaluateSerializer, CommentSerializer, CommentGETSerializer
 from .models import Video, Evaluate, Comment
@@ -69,8 +70,17 @@ class VideoDetailView(APIView):
     def get(self, reqeust, id):
         video = get_object_or_404(Video, id=id)
 
+        comments = Comment.objects.filter(video=video).count()
         serializer = VideoSerializer(video)
-        return Response(serializer.data)
+
+        data = {
+            'video': serializer.data,
+            'extras': {
+                'comments': comments
+            }
+        }
+
+        return Response(data)
 
 
 class VideoFromMTAccountView(APIView):

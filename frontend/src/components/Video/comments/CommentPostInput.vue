@@ -26,8 +26,9 @@
 </script>
 
 <template>
-  <div class="mx-auto mt-3" v-if="authenticatedStore.authenticated">
-    <form @submit.prevent="postComment">
+  <div class="mx-auto mt-3">
+    <p class="text-white font-light mb-3">{{ video.commentsCount }} comments</p>
+    <form @submit.prevent="postComment" v-if="authenticatedStore.authenticated">
       <div class="relative">
         <textarea placeholder="Add Comment..." class="bg-input text-white w-full
         resize-none focus:outline-none

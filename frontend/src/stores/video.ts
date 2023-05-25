@@ -104,28 +104,22 @@ export const useVideoStore = defineStore('video', () => {
     
     // gets a video from the api by id
     const  getVideoByID = async (id:string) => {
-        let video:VideoCALL = {
-            id: '',
-            name: '',
-            video: '',
-            description: '',
-            thumbnail: '',
-            mt_account: '',
-            url: ''
-        }
+        let video:any = {}
 
         await axios
             .get(`/api/video/${id}/`)
             .then(response => {
-                const data = response.data
+                const videoObject = response.data.video
+                const extras = response.data.extras
 
-                video.id = data.id
-                video.name = data.name
-                video.video = data.get_video
-                video.description = data.description
-                video.thumbnail = data.get_thumbnail
-                video.mt_account = data.mt_account
-                video.url = data.get_absolute_url
+                video.id = videoObject.id
+                video.name = videoObject.name
+                video.video = videoObject.get_video
+                video.description = videoObject.description
+                video.thumbnail = videoObject.get_thumbnail
+                video.mt_account = videoObject.mt_account
+                video.url = videoObject.get_absolute_url,
+                video.commentsCount = extras.comments
             })
             .catch(error => {
                 if (error.response.status == 404) {
