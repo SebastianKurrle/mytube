@@ -5,6 +5,7 @@
 
   // components
   import CommentPostInput from "@/components/Video/comments/CommentPostInput.vue";
+  import Comment from "@/components/Video/comments/Comment.vue";
 
   // stores
   const commentStore = useCommentStore()
@@ -22,40 +23,40 @@
   const updateMaxScrollPos = () => {
     if (maxScrollPos.value < window.scrollY) {
       maxScrollPos.value = window.scrollY
+
+      loadComments()
     }
   }
 
   const loadComments = async () => {
-    let result:any;
+    let result = Array()
 
     if (comments.length === 0) {
-      result = await commentStore.getLatestComments('now', comments, video.value.id)
+      result = await commentStore.getLatestComments('now', video.value.id)
     } else {
-      const lastComment:any = comments.slice(-1)
+      const lastComment:any = comments[0]
       const dateTime = lastComment.datetime_posted
-      result = await commentStore.getLatestComments(dateTime, comments, video.value.id)
+      result = await commentStore.getLatestComments(dateTime, video.value.id)
     }
 
-    for (let i = 0; i < result.length; i++) {
-      comments.push(result[i])
-    }
-
-    console.log(comments)
+    result.map(comment => {
+      comments.push(comment)
+    })
   }
 
-  onMounted(() => {
+  onMounted(async () => {
     window.addEventListener('scroll', () => {
       if (route.name === 'video') {
         updateMaxScrollPos()
-        //loadComments()
       }
     })
   })
 </script>
 
 <template>
-  <div>
+  <div class="m-3">
     <CommentPostInput :video="video"/>
+    <Comment :comments="comments"/>
   </div>
 </template>
 
