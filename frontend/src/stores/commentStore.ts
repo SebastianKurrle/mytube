@@ -6,6 +6,7 @@ import axios from "axios";
 
 export const useCommentStore = defineStore('comment', () => {
 
+    // Contains all loaded comments from a video
     const comments = reactive(Array())
 
     /*
@@ -52,6 +53,10 @@ export const useCommentStore = defineStore('comment', () => {
         return newComments
     }
 
+    /*
+        This function loads the 5 latest comments from a video and
+        push them in the comments array
+    */
     const loadComments = async (video:any) => {
         let result = Array()
 
@@ -68,6 +73,11 @@ export const useCommentStore = defineStore('comment', () => {
         })
     }
 
+    /*
+        This function is called if the user posts a comment
+        The function gets the comment by id from the api and place the comment
+        on the first position in the comments array
+    */
     const getPostedComment = async (commentID:string, videoID:string) => {
         await axios
             .get(`/api/video/${videoID}/comments/?value=${commentID}&posted=true`)
