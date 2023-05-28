@@ -34,7 +34,7 @@
     if (comments.length === 0) {
       result = await commentStore.getLatestComments('now', video.value.id)
     } else {
-      const lastComment:any = comments[0]
+      const lastComment:any = comments.slice(-1)[0]
       const dateTime = lastComment.datetime_posted
       result = await commentStore.getLatestComments(dateTime, video.value.id)
     }
@@ -42,10 +42,6 @@
     result.map(comment => {
       comments.push(comment)
     })
-  }
-
-  const commend = () => {
-    console.log('test')
   }
 
   onMounted(async () => {
