@@ -224,13 +224,19 @@ class CommentLoadView(APIView):
     def get(self, request, id):
         video = get_object_or_404(Video, id=id)
 
-        query = request.query_params['start_datetime']
+        query = request.query_params['value']
+        posted = request.query_params['posted']
+        if posted == 'true':
+            comment = get_object_or_404(Comment, id=query)
+            serializer = CommentGETSerializer(comment)
+
+            return Response(serializer.data)
 
         if query == 'now':
             comments = Comment.objects.filter(video=video).order_by('-datetime_posted')[:5]
         else:
             start_datetime = query
-            comments = Comment.objects.filter(datetime_posted__gt=start_datetime, video=video)[:5]
+            comments = Comment.objects.filter(datetime_posted__lt=start_datetime, video=video).order_by('-datetime_posted')[:5]
 
         serializer = CommentGETSerializer(comments, many=True)
 

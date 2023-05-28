@@ -18,33 +18,17 @@
 
   const maxScrollPos = ref(window.scrollY)
 
-  const comments = reactive(Array())
-
   const updateMaxScrollPos = () => {
     if (maxScrollPos.value < window.scrollY) {
       maxScrollPos.value = window.scrollY
 
-      loadComments()
+      commentStore.loadComments(video)
     }
-  }
-
-  const loadComments = async () => {
-    let result = Array()
-
-    if (comments.length === 0) {
-      result = await commentStore.getLatestComments('now', video.value.id)
-    } else {
-      const lastComment:any = comments.slice(-1)[0]
-      const dateTime = lastComment.datetime_posted
-      result = await commentStore.getLatestComments(dateTime, video.value.id)
-    }
-
-    result.map(comment => {
-      comments.push(comment)
-    })
   }
 
   onMounted(async () => {
+    commentStore.comments.length = 0
+
     window.addEventListener('scroll', () => {
       if (route.name === 'video') {
         updateMaxScrollPos()
@@ -56,7 +40,7 @@
 <template>
   <div class="m-3">
     <CommentPostInput :video="video"/>
-    <Comment :comments="comments"/>
+    <Comment :comments="commentStore.comments"/>
   </div>
 </template>
 

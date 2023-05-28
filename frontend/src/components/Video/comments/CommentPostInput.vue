@@ -20,8 +20,9 @@
         user:authenticatedStore.user.id
       }
 
-      await commentStore.postComment(comment)
+      const postedComment = await commentStore.postComment(comment)
       commentMessage.value = ''
+      await commentStore.getPostedComment(postedComment.id, video.value.id)
   }
 </script>
 
