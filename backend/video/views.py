@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import VideoSerializer, EvaluateSerializer, CommentSerializer, CommentGETSerializer
 from .models import Video, Evaluate, Comment
+from .permissons import IsCommentWriter
 from users.extensions import get_user_by_token
 from mytube_account.models import MyTubeAccount
 from django.shortcuts import get_object_or_404
@@ -202,7 +202,7 @@ class VideoEvaluationCountView(APIView):
 
 
 class CommentView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsCommentWriter]
 
     def post(self, request):
         self.check_permissions(request)
@@ -213,6 +213,32 @@ class CommentView(APIView):
 
         return Response(serializer.data)
 
+    # Updates the message from a comment
+    def put(self, request, id):
+        self.check_permissions(request)
+        comment = get_object_or_404(Comment, id=id)
+        self.check_object_permissions(request, comment)
+
+        data = {
+            'video': comment.video.id,
+            'message': request.data['message'],
+            'user': comment.user.id
+        }
+
+        serializer = CommentSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.update(comment, serializer.validated_data)
+
+        return Response(status=200)
+
+    def delete(self, request, id):
+        self.check_permissions(request)
+        comment = get_object_or_404(Comment, id=id)
+        self.check_object_permissions(request, comment)
+
+        comment.delete()
+
+        return Response(status=204)
 
 class CommentLoadView(APIView):
 
