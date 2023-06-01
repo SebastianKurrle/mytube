@@ -9,6 +9,9 @@ export const useCommentStore = defineStore('comment', () => {
     // Contains all loaded comments from a video
     const comments = reactive(Array())
 
+    // Contains a selected comment from a user to update or delete
+    const selectedComment = ref()
+
     /*
         This function posts a comment for a video
         comment parameter is from type Comment
@@ -27,6 +30,35 @@ export const useCommentStore = defineStore('comment', () => {
             })
 
         return postedComment
+    }
+
+    /*
+        Updates the current selected comment
+    */
+    const updateComment = async () => {
+        const data:object = {
+            message: selectedComment.value.message
+        }
+
+        await axios
+            .put(`/api/video/comment/${selectedComment.value.id}/`, data)
+            .catch(error => {
+                toast.error('Something went wrong', { autoClose: 3000 })
+            })
+    }
+
+    /*
+        Deletes the current selected comment
+    */
+    const deleteComment = async () => {
+        await axios
+            .delete(`/api/video/comment/${selectedComment.value.id}/`)
+            .then(response => {
+                toast.error('Comment deleted', { autoClose: 3000 })
+            })
+            .catch(error => {
+                toast.error('Something went wrong', { autoClose: 3000 })
+            })
     }
 
     /*
@@ -91,7 +123,10 @@ export const useCommentStore = defineStore('comment', () => {
 
     return {
         comments,
+        selectedComment,
         postComment,
+        updateComment,
+        deleteComment,
         getLatestComments,
         loadComments,
         getPostedComment

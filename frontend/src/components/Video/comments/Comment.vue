@@ -1,18 +1,32 @@
 <script setup lang="ts">
-  import { reactive } from 'vue'
+  import { reactive, ref } from 'vue'
   import { useAuthenticatedStore } from "@/stores/authenticated";
+  import { useCommentStore } from "@/stores/commentStore";
   import moment from "moment";
+
+  // components
+  import UpdateComment from "@/components/Video/comments/UpdateComment.vue";
+  import DeleteComment from "@/components/Video/comments/DeleteComment.vue";
 
   const props = defineProps(['comments'])
 
   // stores
   const authenticatedStore = useAuthenticatedStore()
+  const commentStore = useCommentStore()
 
   const comments = reactive(props.comments)
 
   const getTimeAgoFromComment = (datetimeString:string) => {
     const datetime = moment(datetimeString);
     return datetime.fromNow();
+  }
+
+  const selectComment = (comment:any) => {
+    commentStore.selectedComment = {
+      id: comment.id,
+      message: comment.message,
+      user: comment.user
+    }
   }
 </script>
 
@@ -26,9 +40,26 @@
       <p class="break-words">
         {{ comment.message }}
         <span v-if="authenticatedStore.authenticated && comment.user.id === authenticatedStore.user.id">
-          <span class="text-sm text-gray-600 mr-3 ml-3"><font-awesome-icon icon="fa-solid fa-pen" /></span>
-          <span class="text-sm text-gray-600"><font-awesome-icon icon="fa-solid fa-trash" /></span>
+          <button
+                  class="text-sm text-gray-600 mr-3 ml-3 hover:text-gray-700"
+                  data-te-toggle="modal"
+                  data-te-target="#updateComment"
+                  data-te-ripple-init
+                  data-te-ripple-color="light"
+                  @click="selectComment(comment)"
+          ><font-awesome-icon icon="fa-solid fa-pen" /></button>
+
+          <button class="text-sm text-gray-600 hover:text-gray-700"
+                  data-te-toggle="modal"
+                  data-te-target="#deleteComment"
+                  data-te-ripple-init
+                  data-te-ripple-color="light"
+                  @click="selectComment(comment)"
+          ><font-awesome-icon icon="fa-solid fa-trash" /></button>
         </span>
+
+        <UpdateComment />
+        <DeleteComment />
       </p>
     </div>
   </div>

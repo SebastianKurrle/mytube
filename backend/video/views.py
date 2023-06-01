@@ -240,6 +240,7 @@ class CommentView(APIView):
 
         return Response(status=204)
 
+
 class CommentLoadView(APIView):
 
     """

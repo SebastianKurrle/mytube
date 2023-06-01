@@ -34,7 +34,9 @@
         <textarea placeholder="Add Comment..." class="bg-input text-white w-full
         resize-none focus:outline-none
         border-t-0 border-r-0 border-l-0 border-b-2
-        border-gray-300 focus:border-blue-500 py-2 pl-2" v-model="commentMessage">
+        border-gray-300 focus:border-blue-500 py-2 pl-2" v-model="commentMessage"
+        required
+        >
         </textarea>
         <div class="absolute bottom-0 left-0 h-1 bg-blue-500"></div>
       </div>
