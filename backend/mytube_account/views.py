@@ -109,6 +109,20 @@ class MyTubeAccountSubscribeView(APIView):
 
         return Response(status=200)
 
+    def delete(self, request):
+        self.check_permissions(request)
+
+        mt_account = request.data['mt_account']
+        user = request.data['user']
+
+        if not self.check_user_subscribed(mt_account, user):
+            return Response({'message': 'User is not subscriber of the MyTube account'}, status=204)
+
+        subscribe = Subscribe.objects.get(mt_account=mt_account, user=user)
+        subscribe.delete()
+
+        return Response(status=200)
+
     # Checks if a user has subscribed a mytube account yet
     def check_user_subscribed(self, mt_account, user):
         return len(Subscribe.objects.filter(mt_account=mt_account, user=user)) == 1
