@@ -89,7 +89,7 @@ class VideoFromMTAccountView(APIView):
     def get(self, request, mt_account_id):
         mt_account = MyTubeAccount.objects.get(id=mt_account_id)
 
-        videos = Video.objects.filter(mt_account=mt_account)
+        videos = Video.objects.filter(mt_account=mt_account).order_by('-datetime_posted')
         serializer = VideoSerializer(videos, many=True)
         return Response(serializer.data)
 
