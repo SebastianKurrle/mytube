@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import MyTubeAccountSerializer
-from .models import MyTubeAccount
+from .serializers import MyTubeAccountSerializer, MyTubeAccountSubscribeSerializer
+from .models import MyTubeAccount, Subscribe
 from django.shortcuts import get_object_or_404
 from django.core.files.storage import default_storage
 from mytube.generally_permissons import IsAuthenticated
@@ -92,3 +92,23 @@ class MyTubeAccountDetailView(APIView):
 
         serializer = MyTubeAccountSerializer(mt_account)
         return Response(serializer.data)
+
+
+class MyTubeAccountSubscribeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        self.check_permissions(request)
+
+        if self.check_user_subscribed(request.data['mt_account'], request.data['user']):
+            return Response({'message': 'User has already subscribed'}, status=204)
+
+        serializer = MyTubeAccountSubscribeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(status=200)
+
+    # Checks if a user has subscribed a mytube account yet
+    def check_user_subscribed(self, mt_account, user):
+        return len(Subscribe.objects.filter(mt_account=mt_account, user=user)) == 1

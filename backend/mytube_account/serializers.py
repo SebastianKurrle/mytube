@@ -1,7 +1,7 @@
 from django.core.files.storage import default_storage
 from rest_framework import serializers, validators
 from rest_framework.exceptions import ErrorDetail
-from .models import MyTubeAccount
+from .models import MyTubeAccount, Subscribe
 from uuid import uuid4
 
 
@@ -61,3 +61,16 @@ class MyTubeAccountSerializer(serializers.ModelSerializer):
 
         return instance
 
+
+class MyTubeAccountSubscribeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Subscribe
+
+        fields = '__all__'
+
+    def create(self, validated_data):
+        id = uuid4()
+
+        subscribe = Subscribe.objects.create(id=id, **validated_data)
+        return subscribe

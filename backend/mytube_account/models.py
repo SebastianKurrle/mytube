@@ -18,3 +18,12 @@ class MyTubeAccount(models.Model):
 
     def get_prof_picture(self):
         return 'http://127.0.0.1:8000' + self.profile_picture.url
+
+
+class Subscribe(models.Model):
+    id = models.CharField(primary_key=True, editable=False, max_length=255)
+    mt_account = models.ForeignKey(MyTubeAccount, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.id
