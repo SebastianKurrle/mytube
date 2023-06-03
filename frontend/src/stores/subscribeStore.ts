@@ -17,7 +17,7 @@ export const useSubscribeStore = defineStore('subscribe', () => {
         let subscribed:boolean = false
 
         await axios
-            .get(`/api/mytube-account/subscribe/${mtAccountID}/`)
+            .get(`/api/mytube-account/subscribe/check/${mtAccountID}/`)
             .then(response => {
                 subscribed = response.data.subscribed
             })
@@ -28,6 +28,9 @@ export const useSubscribeStore = defineStore('subscribe', () => {
         return subscribed
     }
 
+    /*
+        Function to subscribe a MyTube account
+    */
     const subscribe = async (mtAccountID:string) => {
         const data = {
             mt_account: mtAccountID,
@@ -41,6 +44,9 @@ export const useSubscribeStore = defineStore('subscribe', () => {
             })
     }
 
+    /*
+        Function to unsubscribe a MyTube account
+    */
     const unsubscribe = async (mtAccountID:string) => {
         const data = {
             mt_account: mtAccountID,
