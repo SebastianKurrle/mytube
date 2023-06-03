@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, reactive } from 'vue'
 import { toast } from "vue3-toastify";
-import { useRoute } from "vue-router";
 import type { MyTubeAccount, MyTubeAccountUpdate } from "@/assets/interfaces";
 import router from "@/router";
 import axios from "axios";

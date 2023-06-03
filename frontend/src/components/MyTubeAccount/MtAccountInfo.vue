@@ -1,9 +1,48 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { onMounted, ref} from 'vue';
+    import { useSubscribeStore } from "@/stores/subscribeStore";
+    import { useAuthenticatedStore } from "@/stores/authenticated";
+    import router from "@/router";
 
     const props = defineProps(['mtaccount'])
 
-    const mtaccount = props.mtaccount
+    // stores
+    const subscribeStore = useSubscribeStore()
+    const authenticatedStore = useAuthenticatedStore()
+
+    const mtaccount = ref(props.mtaccount)
+
+    const subscribed = ref()
+    subscribed.value = false
+
+    const checkSubscribed = async () => {
+      subscribed.value = await subscribeStore.checkUserSubscribed(mtaccount.value.id)
+    }
+
+    const subscribe = async () => {
+      if (!authenticatedStore.authenticated) {
+        return router.push({name: 'login'})
+      }
+
+      await subscribeStore.subscribe(mtaccount.value.id)
+      await checkSubscribed()
+    }
+
+    const unsubscribe = async () => {
+      if (!authenticatedStore.authenticated) {
+        return router.push({name: 'login'})
+      }
+
+      await subscribeStore.unsubscribe(mtaccount.value.id)
+      await checkSubscribed()
+    }
+
+    onMounted(() => {
+      if (authenticatedStore.authenticated) {
+        checkSubscribed()
+      }
+    })
+
 </script>
 
 <template>
@@ -20,7 +59,17 @@
             </div>
     
             <div class="content">
-                <button class="bg-subbutton p-3 rounded-3xl text-black font-semibold hover:bg-gray-300">
+                <button class="bg-subutton2 p-3 rounded-3xl text-white font-semibold hover:bg-gray-600"
+                v-if="subscribed"
+                @click="unsubscribe"
+                >
+                  Subscribed
+                </button>
+
+                <button class="bg-subbutton p-3 rounded-3xl text-black font-semibold hover:bg-gray-300"
+                v-else
+                @click="subscribe"
+                >
                     Subscribe
                 </button>
             </div>
@@ -34,6 +83,10 @@
 
 .bg-subbutton {
     background-color: #D9D9D9;
+}
+
+.bg-subutton2 {
+  background-color: #3F3F3F;
 }
 
 .content {
