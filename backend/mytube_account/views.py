@@ -1,4 +1,5 @@
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import MyTubeAccountSerializer, MyTubeAccountSubscribeSerializer
 from .models import MyTubeAccount, Subscribe
@@ -141,3 +142,10 @@ class MyTubeAccountSubscribeDetailView(APIView):
         subscribed = len(Subscribe.objects.filter(mt_account=mt_account, user=user)) == 1
 
         return Response({'subscribed': subscribed})
+
+
+@api_view(['get'])
+def count_subscribers(request, mt_account_id):
+    subscriber_count = Subscribe.objects.filter(mt_account=mt_account_id).count()
+
+    return Response({'subCount': subscriber_count})
