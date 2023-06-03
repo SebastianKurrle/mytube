@@ -126,3 +126,18 @@ class MyTubeAccountSubscribeView(APIView):
     # Checks if a user has subscribed a mytube account yet
     def check_user_subscribed(self, mt_account, user):
         return len(Subscribe.objects.filter(mt_account=mt_account, user=user)) == 1
+
+
+class MyTubeAccountSubscribeDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # Checks if a user has subscribed a mytube account and returns the response with the result
+    def get(self, request, mt_account_id):
+        self.check_permissions(request)
+        mt_account = get_object_or_404(MyTubeAccount, id=mt_account_id)
+
+        user = get_user_by_token(request)
+
+        subscribed = len(Subscribe.objects.filter(mt_account=mt_account, user=user)) == 1
+
+        return Response({'subscribed': subscribed})
