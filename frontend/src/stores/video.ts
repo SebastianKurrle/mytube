@@ -1,11 +1,15 @@
 import { defineStore } from "pinia";
 import { ref, reactive } from 'vue'
 import { toast } from "vue3-toastify";
+import { useAuthenticatedStore } from "@/stores/authenticated";
 import type { Video, VideoCALL } from "@/assets/interfaces";
 import axios from "axios";
 
-// handles all video funktions
+// handles all video functions
 export const useVideoStore = defineStore('video', () => {
+    // stores
+    const authenticatedStore = useAuthenticatedStore()
+
     const uploadErrors = reactive(Array())
 
     // vars for the video upload in chunks
@@ -101,9 +105,33 @@ export const useVideoStore = defineStore('video', () => {
     /* 
         Get Videos
     */
-    
+
+    /*
+        The function gets the suggested videos for the HomeView
+        If the user is authenticated it will return the 10 latest videos from the subscribed MyTube accounts
+        by the user.
+        If the user is unauthenticated it will return the 10 latest and most popular videos
+        If the user has 0 subscribed MyTube accounts it will also return the 10 latest and most popular videos
+    */
+    const getSuggestedVideos = async ():Promise<Array<object>> => {
+        const suggestedVideos = Array<object>()
+        await axios
+            .get(`/api/video/suggest/?auth=${authenticatedStore.authenticated}`)
+            .then(response => {
+                const data:Array<object> = response.data.videos
+                data.map(video => {
+                    suggestedVideos.push(video)
+                })
+            })
+            .catch(error => {
+                toast.error('Something went wrong', { autoClose: 3000 })
+            })
+
+        return suggestedVideos
+    }
+
     // gets a video from the api by id
-    const  getVideoByID = async (id:string) => {
+    const getVideoByID = async (id:string) => {
         let video:any = {}
 
         await axios
@@ -180,6 +208,7 @@ export const useVideoStore = defineStore('video', () => {
     return { 
         uploadErrors, 
         uploadVideo,
+        getSuggestedVideos,
         getVideoByID,
         getVideosFromMtAccount,
         updateProgress,

@@ -1,8 +1,10 @@
 <script setup lang="ts">
+  // components
+  import SuggestedVideos from "@/components/Video/SuggestedVideos.vue";
 </script>
 
 <template>
   <div>
-    <h1 class="text-3xl text-center text-white">Home</h1>
+    <SuggestedVideos />
   </div>
 </template>
