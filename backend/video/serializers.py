@@ -15,6 +15,8 @@ class VideoSerializer(serializers.ModelSerializer):
             'video',
             'description',
             'thumbnail',
+            'datetime_posted',
+            'calls',
             'mt_account',
             'get_absolute_url',
             'get_video',

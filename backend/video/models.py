@@ -11,6 +11,7 @@ class Video(models.Model):
     description = models.TextField(null=True)
     thumbnail = models.ImageField(upload_to='videos-thumbnails/')
     datetime_posted = models.DateTimeField(default=timezone.now)
+    calls = models.PositiveIntegerField(default=0)
     mt_account = models.ForeignKey(MyTubeAccount, on_delete=models.CASCADE)
 
     def __str__(self):

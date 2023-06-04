@@ -70,6 +70,9 @@ class VideoDetailView(APIView):
     def get(self, reqeust, id):
         video = get_object_or_404(Video, id=id)
 
+        video.calls += 1
+        video.save()
+
         comments = Comment.objects.filter(video=video).count()
         serializer = VideoSerializer(video)
 

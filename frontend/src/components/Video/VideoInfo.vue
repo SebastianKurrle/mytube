@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import { ref } from 'vue';
+    import moment from "moment";
 
     // components
     import MtAccountBox from '../MyTubeAccount/MtAccountBox.vue';
@@ -8,6 +9,12 @@
     const props = defineProps(['video'])
 
     const video = ref(props.video)
+
+    const getTimeAgoFromVideo = (datetimeString:string) => {
+      const datetime = moment(datetimeString);
+      return datetime.fromNow();
+    }
+
 </script>
 
 <template>
@@ -21,7 +28,8 @@
         </div>
 
         <div class="bg-infobox p-3 rounded-md mt-3">
-            {{ video.description }}
+            <p class="font-semibold">{{ video.calls }} Calls {{ getTimeAgoFromVideo(video.datetime_posted) }}</p>
+            <p>{{ video.description }}</p>
         </div>
     </div>
 </template>

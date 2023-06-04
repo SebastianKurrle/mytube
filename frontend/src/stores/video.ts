@@ -117,6 +117,8 @@ export const useVideoStore = defineStore('video', () => {
                 video.video = videoObject.get_video
                 video.description = videoObject.description
                 video.thumbnail = videoObject.get_thumbnail
+                video.datetime_posted = videoObject.datetime_posted
+                video.calls = videoObject.calls
                 video.mt_account = videoObject.mt_account
                 video.url = videoObject.get_absolute_url,
                 video.commentsCount = extras.comments
