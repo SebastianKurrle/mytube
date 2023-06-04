@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('video/', views.VideoView.as_view()),
+    path('video/suggest/', views.VideoSuggestionView.as_view()),
     path('video/comment/', views.CommentView.as_view()),
     path('video/comment/<str:id>/', views.CommentView.as_view()),
     path('video/<str:id>/comments/', views.CommentLoadView.as_view()),

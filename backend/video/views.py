@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import VideoSerializer, EvaluateSerializer, CommentSerializer, CommentGETSerializer
 from .models import Video, Evaluate, Comment
+from mytube_account.models import Subscribe
 from .permissons import IsCommentWriter
 from users.extensions import get_user_by_token
 from mytube_account.models import MyTubeAccount
@@ -62,6 +63,44 @@ class VideoView(APIView):
     # Create a temporary file
     def create_tempfile(self):
         return tempfile.NamedTemporaryFile(delete=False)
+
+
+class VideoSuggestionView(APIView):
+
+    # Gets the suggested videos
+    def get(self, request):
+        authenticated = request.query_params['auth']
+
+        if authenticated == 'true':
+            user = get_user_by_token(request)
+            subscribed_accounts = self.get_subscribed_mt_accounts(user)
+            suggested_videos = self.suggested_videos_subscribed_accounts(subscribed_accounts)
+
+            serializer = VideoSerializer(suggested_videos, many=True)
+
+            return Response({'videos': serializer.data})
+
+        suggested_videos = self.suggested_videos_latest_most_popular()
+        serializer = VideoSerializer(suggested_videos, many=True)
+
+        return Response({'videos': serializer.data})
+
+    # Gets all subscribed MyTube accounts from a user
+    def get_subscribed_mt_accounts(self, user):
+        return Subscribe.objects.filter(user=user).values_list('mt_account', flat=True)
+
+    # Gets the 10 latest videos from the MyTube accounts the user subscribed
+    # If the user has 0 subscribed MyTube accounts it will return the latest and most popular videos
+    def suggested_videos_subscribed_accounts(self, sub_accounts):
+        videos = Video.objects.filter(mt_account__in=sub_accounts).order_by('-datetime_posted')[:10]
+
+        if len(videos) == 0:
+            return self.suggested_videos_latest_most_popular()
+
+    # Gets the 10 latest videos based on the calls
+    # (only used if the user is unauthenticated or has 0 subscribed MyTube Accounts)
+    def suggested_videos_latest_most_popular(self):
+        return Video.objects.all().order_by('-datetime_posted', '-calls')[:10]
 
 
 class VideoDetailView(APIView):
