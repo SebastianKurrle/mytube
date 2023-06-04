@@ -97,6 +97,8 @@ class VideoSuggestionView(APIView):
         if len(videos) == 0:
             return self.suggested_videos_latest_most_popular()
 
+        return videos
+
     # Gets the 10 latest videos based on the calls
     # (only used if the user is unauthenticated or has 0 subscribed MyTube Accounts)
     def suggested_videos_latest_most_popular(self):
