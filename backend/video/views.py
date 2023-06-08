@@ -1,6 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import VideoSerializer, EvaluateSerializer, CommentSerializer, CommentGETSerializer
+from .serializers import \
+    VideoSerializer, \
+    VideoGETSerializer, \
+    EvaluateSerializer, \
+    CommentSerializer, \
+    CommentGETSerializer
 from .models import Video, Evaluate, Comment
 from mytube_account.models import Subscribe
 from .permissons import IsCommentWriter
@@ -76,12 +81,12 @@ class VideoSuggestionView(APIView):
             subscribed_accounts = self.get_subscribed_mt_accounts(user)
             suggested_videos = self.suggested_videos_subscribed_accounts(subscribed_accounts)
 
-            serializer = VideoSerializer(suggested_videos, many=True)
+            serializer = VideoGETSerializer(suggested_videos, many=True)
 
             return Response({'videos': serializer.data})
 
         suggested_videos = self.suggested_videos_latest_most_popular()
-        serializer = VideoSerializer(suggested_videos, many=True)
+        serializer = VideoGETSerializer(suggested_videos, many=True)
 
         return Response({'videos': serializer.data})
 
@@ -115,7 +120,7 @@ class VideoDetailView(APIView):
         video.save()
 
         comments = Comment.objects.filter(video=video).count()
-        serializer = VideoSerializer(video)
+        serializer = VideoGETSerializer(video)
 
         data = {
             'video': serializer.data,
@@ -134,7 +139,7 @@ class VideoFromMTAccountView(APIView):
         mt_account = MyTubeAccount.objects.get(id=mt_account_id)
 
         videos = Video.objects.filter(mt_account=mt_account).order_by('-datetime_posted')
-        serializer = VideoSerializer(videos, many=True)
+        serializer = VideoGETSerializer(videos, many=True)
         return Response(serializer.data)
 
 

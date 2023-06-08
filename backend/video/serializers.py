@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Video, Evaluate, Comment
 from users.serializers import UserSerializer
+from mytube_account.serializers import MyTubeAccountSerializer
 from uuid import uuid4
 
 
@@ -26,15 +27,30 @@ class VideoSerializer(serializers.ModelSerializer):
     # creates a video
     def create(self, validated_data):
         id = uuid4()
-        name = validated_data.get('name')
-        video = validated_data.get('video')
-        description = validated_data.get('description')
-        thumbnail = validated_data.get('thumbnail')
-        mt_account = validated_data.get('mt_account')
-
-        video = Video.objects.create(id=id, name=name, video=video, description=description, thumbnail=thumbnail, mt_account=mt_account)
+        video = Video.objects.create(id=id, **validated_data)
 
         return video
+
+
+class VideoGETSerializer(serializers.ModelSerializer):
+    mt_account = MyTubeAccountSerializer()
+
+    class Meta:
+        model = Video
+
+        fields = (
+            'id',
+            'name',
+            'video',
+            'description',
+            'thumbnail',
+            'datetime_posted',
+            'calls',
+            'mt_account',
+            'get_absolute_url',
+            'get_video',
+            'get_thumbnail'
+        )
 
 
 class EvaluateSerializer(serializers.ModelSerializer):
