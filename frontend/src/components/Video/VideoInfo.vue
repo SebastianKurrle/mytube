@@ -1,35 +1,33 @@
 <script setup lang="ts">
     import { ref } from 'vue';
-    import moment from "moment";
+    import { useVideoStore } from "@/stores/video";
 
     // components
     import MtAccountBox from '../MyTubeAccount/MtAccountBox.vue';
     import EvaluateVideo from './EvaluateVideo.vue';
 
+    // stores
+    const videoStore = useVideoStore()
+
     const props = defineProps(['video'])
 
     const video = ref(props.video)
-
-    const getTimeAgoFromVideo = (datetimeString:string) => {
-      const datetime = moment(datetimeString);
-      return datetime.fromNow();
-    }
 
 </script>
 
 <template>
     <div class="text-white p-3">
         <div class="mt-3">
-            <h5 class="text-xl font-semibold">{{ video.name }}</h5>
+            <h5 class="text-lg md:text-xl font-semibold">{{ video.name }}</h5>
             <div class="video-info">
-                <MtAccountBox :mtaccountID="video.mt_account"/>
+                <MtAccountBox :mtaccountID="video.mt_account.id"/>
                 <EvaluateVideo :video="video"/>
             </div>
         </div>
 
         <div class="bg-infobox p-3 rounded-md mt-3">
-            <p class="font-semibold">{{ video.calls }} Calls {{ getTimeAgoFromVideo(video.datetime_posted) }}</p>
-            <p>{{ video.description }}</p>
+            <p class="font-semibold text-sm md:text-lg">{{ video.calls }} Views {{ videoStore.getTimeAgoFromVideo(video.datetime_posted) }}</p>
+            <p class="text-sm md:text-lg">{{ video.description }}</p>
         </div>
     </div>
 </template>

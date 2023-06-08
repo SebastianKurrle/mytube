@@ -10,7 +10,7 @@
     const subscribeStore = useSubscribeStore()
     const authenticatedStore = useAuthenticatedStore()
 
-    const mtaccount = ref(props.mtaccount)
+    const mtAccount = ref(props.mtaccount)
 
     const subscribed = ref()
     subscribed.value = false
@@ -20,7 +20,7 @@
     const loaded = ref(false)
 
     const checkSubscribed = async () => {
-      subscribed.value = await subscribeStore.checkUserSubscribed(mtaccount.value.id)
+      subscribed.value = await subscribeStore.checkUserSubscribed(mtAccount.value.id)
     }
 
     const subscribe = async () => {
@@ -28,9 +28,9 @@
         return router.push({name: 'login'})
       }
 
-      await subscribeStore.subscribe(mtaccount.value.id)
+      await subscribeStore.subscribe(mtAccount.value.id)
       await checkSubscribed()
-      subCount.value = await subscribeStore.countSubscribers(mtaccount.value.id)
+      subCount.value = await subscribeStore.countSubscribers(mtAccount.value.id)
     }
 
     const unsubscribe = async () => {
@@ -38,9 +38,9 @@
         return router.push({name: 'login'})
       }
 
-      await subscribeStore.unsubscribe(mtaccount.value.id)
+      await subscribeStore.unsubscribe(mtAccount.value.id)
       await checkSubscribed()
-      subCount.value = await subscribeStore.countSubscribers(mtaccount.value.id)
+      subCount.value = await subscribeStore.countSubscribers(mtAccount.value.id)
     }
 
     onMounted(async () => {
@@ -48,7 +48,7 @@
         checkSubscribed()
       }
 
-      subCount.value = await subscribeStore.countSubscribers(mtaccount.value.id)
+      subCount.value = await subscribeStore.countSubscribers(mtAccount.value.id)
       loaded.value = true
     })
 
@@ -59,16 +59,16 @@
         <div class="box">
             <div class="content">
                 <div class="w-36 h-36 rounded-full overflow-hidden">
-                    <img :src="mtaccount.get_prof_picture">
+                    <img :src="mtAccount.get_prof_picture">
                 </div>
                 <div class="ml-4">
-                    <h2 class="text-3xl font-bold">{{ mtaccount.name }}</h2>
-                    <p class="text-lg text-gray-500">{{ mtaccount.description }}</p>
+                    <h2 class="text-xl md:text-3xl font-bold">{{ mtAccount.name }}</h2>
+                    <p class="text-lg text-gray-500">{{ mtAccount.description }}</p>
                     <p class="text-gray-300">{{ subCount }} Subscribers</p>
                 </div>
             </div>
     
-            <div class="content">
+            <div class="content m-3">
               <button class="bg-subutton2 p-3 rounded-3xl text-white font-semibold hover:bg-gray-600"
                       v-if="subscribed"
                       @click="unsubscribe"

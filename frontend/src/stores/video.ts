@@ -4,6 +4,7 @@ import { toast } from "vue3-toastify";
 import { useAuthenticatedStore } from "@/stores/authenticated";
 import type { Video, VideoCALL } from "@/assets/interfaces";
 import axios from "axios";
+import moment from "moment/moment";
 
 // handles all video functions
 export const useVideoStore = defineStore('video', () => {
@@ -87,7 +88,7 @@ export const useVideoStore = defineStore('video', () => {
     }
 
     /*
-    Checks the status of the current upload if the upload isn`t finshed
+    Checks the status of the current upload if the upload isn`t finished
     it will continue the upload otherwise it resets all uploads vars
     */
     const checkUploadStatus = (file:any, video:Video) => {
@@ -205,6 +206,11 @@ export const useVideoStore = defineStore('video', () => {
         currentProgress.value = (uploadedChunks / totalChunks.value) * 100
     }
 
+    const getTimeAgoFromVideo = (datetimeString:string) => {
+        const datetime = moment(datetimeString);
+        return datetime.fromNow();
+    }
+
     return { 
         uploadErrors, 
         uploadVideo,
@@ -212,6 +218,7 @@ export const useVideoStore = defineStore('video', () => {
         getVideoByID,
         getVideosFromMtAccount,
         updateProgress,
+        getTimeAgoFromVideo,
         remainingChunks, 
         chunkSize, 
         totalChunks,
