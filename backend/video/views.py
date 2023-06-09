@@ -12,6 +12,7 @@ from .permissons import IsCommentWriter
 from users.extensions import get_user_by_token
 from mytube_account.models import MyTubeAccount
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from mytube.generally_permissons import IsAuthenticated
 from django.core.files.uploadedfile import SimpleUploadedFile
 import os, tempfile
@@ -141,6 +142,18 @@ class VideoFromMTAccountView(APIView):
         videos = Video.objects.filter(mt_account=mt_account).order_by('-datetime_posted')
         serializer = VideoGETSerializer(videos, many=True)
         return Response(serializer.data)
+
+
+class VideoSearchView(APIView):
+
+    def get(self, request):
+        query = request.query_params['query']
+
+        query_result = Video.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+
+        serializer = VideoGETSerializer(query_result, many=True)
+
+        return Response({'searchResult': serializer.data})
 
 
 class VideoEvaluationView(APIView):
