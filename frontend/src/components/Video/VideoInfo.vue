@@ -26,7 +26,7 @@
         </div>
 
         <div class="bg-infobox p-3 rounded-md mt-3">
-            <p class="font-semibold text-sm md:text-lg">{{ video.calls }} Views {{ videoStore.getTimeAgoFromVideo(video.datetime_posted) }}</p>
+            <p class="text-sm md:text-lg">{{ video.calls }} Views {{ videoStore.getTimeAgoFromVideo(video.datetime_posted) }}</p>
             <p class="text-sm md:text-lg">{{ video.description }}</p>
         </div>
     </div>
