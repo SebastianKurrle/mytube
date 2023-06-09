@@ -190,6 +190,8 @@ export const useVideoStore = defineStore('video', () => {
                 name: d.name,
                 video: d.get_video,
                 description: d.description,
+                calls: d.calls,
+                datetime_posted: d.datetime_posted,
                 thumbnail: d.get_thumbnail,
                 mt_account: d.mt_account,
                 url: d.get_absolute_url

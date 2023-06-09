@@ -42,6 +42,8 @@ interface VideoCALL {
     name:string,
     video:string,
     thumbnail:string,
+    calls: number,
+    datetime_posted:string,
     description:string,
     mt_account:string,
     url:string

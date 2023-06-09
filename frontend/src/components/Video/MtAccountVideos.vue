@@ -34,6 +34,7 @@
                 </div>
                 <div class="py-4">
                     <div class="font-bold text-base mb-2 break-words w-80">{{ video.name }}</div>
+                    <p class="text-sm font-light text-gray-400">{{ video.calls }} Views - {{ videoStore.getTimeAgoFromVideo(video.datetime_posted) }}</p>
                 </div>
             </RouterLink>
         </div>  
