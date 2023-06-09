@@ -149,7 +149,8 @@ class VideoSearchView(APIView):
     def get(self, request):
         query = request.query_params['query']
 
-        query_result = Video.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+        query_result = Video.objects.filter(Q(name__icontains=query) |
+                                            Q(description__icontains=query)).order_by('-datetime_posted', '-calls')
 
         serializer = VideoGETSerializer(query_result, many=True)
 

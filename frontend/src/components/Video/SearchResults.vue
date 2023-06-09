@@ -1,30 +1,23 @@
 <script setup lang="ts">
   import { onMounted, ref, reactive } from "vue";
   import { useVideoStore } from "@/stores/video";
-  import {RouterLink } from "vue-router";
+  import { RouterLink } from "vue-router";
 
   // stores
   const videoStore = useVideoStore()
 
-  const suggestedVideos = reactive(Array<object>())
-
   const loaded = ref(false)
 
   onMounted(async () => {
-    const result:Array<object> = await videoStore.getSuggestedVideos()
-
-    result.map(video => {
-      suggestedVideos.push(video)
-    })
+    await videoStore.searchVideos()
 
     loaded.value = true
   })
-
 </script>
 
 <template>
   <div v-if="loaded" class="mt-3 video-container">
-    <div class="max-w-md rounded overflow-hidden video-item text-white" v-for="video in suggestedVideos">
+    <div class="max-w-md rounded overflow-hidden video-item text-white" v-for="video in videoStore.searchResult">
       <RouterLink :to="{ name: 'video', params: {id: video.id} }">
         <div class="thumbnail-preview">
           <img class="w-full object-cover overflow-hidden" :src="video.get_thumbnail" alt="Thumbnail">

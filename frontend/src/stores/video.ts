@@ -2,12 +2,15 @@ import { defineStore } from "pinia";
 import { ref, reactive } from 'vue'
 import { toast } from "vue3-toastify";
 import { useAuthenticatedStore } from "@/stores/authenticated";
+import { useRoute } from "vue-router";
 import type { Video, VideoCALL } from "@/assets/interfaces";
 import axios from "axios";
 import moment from "moment/moment";
 
 // handles all video functions
 export const useVideoStore = defineStore('video', () => {
+    const route = useRoute()
+
     // stores
     const authenticatedStore = useAuthenticatedStore()
 
@@ -21,6 +24,9 @@ export const useVideoStore = defineStore('video', () => {
     const totalChunks = ref(0)
 
     const currentProgress = ref(0)
+
+    const searchQuery = ref('')
+    const searchResult = reactive(Array<object>())
 
     /* 
         Upload Vidoes
@@ -180,6 +186,23 @@ export const useVideoStore = defineStore('video', () => {
         return videos
     }
 
+    const searchVideos = async () => {
+
+        const query = route.query.query
+
+        await axios
+            .get(`/api/video/search/?query=${query}`)
+            .then(response => {
+                const result:Array<object> = response.data.searchResult
+
+                searchResult.length = 0
+
+                result.map(video => {
+                    searchResult.push(video)
+                })
+            })
+    }
+
     // loops over an array and evaluate it into VideoCALL objects
     const dataEvaluation = (data:Array<any>) => {
         let videos = Array<VideoCALL>()
@@ -219,11 +242,14 @@ export const useVideoStore = defineStore('video', () => {
         getSuggestedVideos,
         getVideoByID,
         getVideosFromMtAccount,
+        searchVideos,
         updateProgress,
         getTimeAgoFromVideo,
         remainingChunks, 
         chunkSize, 
         totalChunks,
-        currentProgress
+        currentProgress,
+        searchQuery,
+        searchResult
     }
 })

@@ -1,4 +1,15 @@
 <script setup lang="ts">
+  import { ref } from 'vue'
+  import { useVideoStore } from "@/stores/video";
+  import router from "@/router";
+
+  // stores
+  const videoStore = useVideoStore()
+
+  const search = async () => {
+    await router.push(`/result?query=${videoStore.searchQuery}`)
+    await videoStore.searchVideos()
+  }
 </script>
 
 <template>
@@ -10,13 +21,17 @@
               class="relative m-0 -mr-px block w-[1%] min-w-0 flex-auto rounded-xl border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-1.5 text-base font-normal text-neutral-700 outline-none transition duration-300 ease-in-out focus:border-primary focus:text-white focus:shadow-te-primary focus:outline-none dark:text-neutral-200 dark:placeholder:text-neutral-200"
               placeholder="Search"
               aria-label="Search"
-              aria-describedby="button-addon1" />
+              aria-describedby="button-addon1"
+              v-model="videoStore.searchQuery"
+            />
             <button
               class="relative z-[2] flex items-center rounded-xl bg-primary px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
               type="button"
               id="button-addon1"
               data-te-ripple-init
-              data-te-ripple-color="light">
+              data-te-ripple-color="light"
+              @click="search"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"

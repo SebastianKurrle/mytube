@@ -11,6 +11,7 @@ import MyTubeAccountView from '@/views/MyTubeAccount/MyTubeAccountView.vue'
 import MyTubeAccountSettingsView from '@/views/MyTubeAccount/MyTubeAccountSettingsView.vue'
 import MyTubeAccountDetailView from '@/views/MyTubeAccount/MyTubeAccountDetailView.vue'
 import VideoView from '@/views/Video/VideoView.vue'
+import VideoSearchView from "@/views/Video/VideoSearchView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,6 +58,11 @@ const router = createRouter({
       path: '/video/:id',
       name: 'video',
       component: VideoView,
+    },
+    {
+      path: '/result',
+      name: 'video-search',
+      component: VideoSearchView,
     },
     {
       path: '/mytube-account/settings/:name',
