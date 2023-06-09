@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from mytube import settings
 
 
 # Account a user can create to upload videos
@@ -14,10 +15,16 @@ class MyTubeAccount(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return 'http://localhost:5173/' + str(self.name)
+        if settings.DEBUG:
+            return 'http://localhost:5173/' + str(self.name)
+
+        return 'https://mytube.sebastiankurrle-projects.de/'
 
     def get_prof_picture(self):
-        return 'http://127.0.0.1:8000' + self.profile_picture.url
+        if settings.DEBUG:
+            return 'http://127.0.0.1:8000' + self.profile_picture.url
+
+        return 'https://apimt.sebastiankurrle-projects.de'
 
 
 class Subscribe(models.Model):

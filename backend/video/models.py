@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from mytube_account.models import MyTubeAccount
 from users.models import User
+from mytube import settings
 
 
 class Video(models.Model):
@@ -18,13 +19,22 @@ class Video(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return f'http://localhost:5173/video/{self.id}'
+        if settings.DEBUG:
+            return f'http://localhost:5173/video/{self.id}'
+
+        return f'https://mytube.sebastiankurrle-projects.de/video/{self.id}'
 
     def get_video(self):
-        return f'http://127.0.0.1:8000{self.video.url}'
+        if settings.DEBUG:
+            return f'http://127.0.0.1:8000{self.video.url}'
+
+        return f'http://apimt.sebastiankurrle-projects.de{self.video.url}'
 
     def get_thumbnail(self):
-        return f'http://127.0.0.1:8000{self.thumbnail.url}'
+        if settings.DEBUG:
+            return f'http://127.0.0.1:8000{self.thumbnail.url}'
+
+        return f'https://apimt.sebastiankurrle-projects.de{self.thumbnail.url}'
 
 
 class Evaluate(models.Model):

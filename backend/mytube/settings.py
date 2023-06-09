@@ -25,8 +25,15 @@ SECRET_KEY = 'django-insecure-o0ms@y(7744x^!&fz1jp0&%30w202@52n_^r9dmakgq^a5@6&%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'apimt.sebastiankurrle-projects.de'
+]
 
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'https://mytube.sebastiankurrle-projects.de'
+]
 
 # Application definition
 
@@ -129,7 +136,6 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 
 AUTH_USER_MODEL = 'users.User'
 
-CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 SESSION_COOKIE_SECURE = False

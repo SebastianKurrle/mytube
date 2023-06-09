@@ -16,7 +16,13 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000'
+const DEBUG = true
+
+if (DEBUG) {
+    axios.defaults.baseURL = 'http://127.0.0.1:8000'
+} else {
+    axios.defaults.baseURL = 'https://apimt.sebastiankurrle-projects.de'
+}
 axios.defaults.withCredentials = true
 
 library.add(fas)
