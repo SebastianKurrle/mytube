@@ -10,7 +10,7 @@ import './assets/main.css'
 import 'tw-elements/dist/js/index.min.js'
 import 'vue3-toastify/dist/index.css'
 
-// fontawsome
+// fontawesome
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'

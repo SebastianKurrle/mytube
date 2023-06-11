@@ -22,6 +22,7 @@ export const useVideoStore = defineStore('video', () => {
     let uploadedChunks = 0;
     const remainingChunks = ref(0);
     const totalChunks = ref(0)
+    const tempFile = ref('')
 
     const currentProgress = ref(0)
 
@@ -46,6 +47,7 @@ export const useVideoStore = defineStore('video', () => {
                 }
             })
             .then(response => {
+                setTempFile(response.data)
                 calculateUpload()
                 updateProgress()
                 checkUploadStatus(file, video)
@@ -61,7 +63,7 @@ export const useVideoStore = defineStore('video', () => {
     to finish the upload
     */
     const createDataForUpload = (video:Video, chunk:any) => {
-        let data = {}
+        let data:any = {}
 
         if (remainingChunks.value > 1) {
             data = {
@@ -83,6 +85,8 @@ export const useVideoStore = defineStore('video', () => {
             }
         }
 
+        data.tempFile = tempFile.value
+
         return data
     }
 
@@ -91,6 +95,12 @@ export const useVideoStore = defineStore('video', () => {
         offset += chunkSize.value;
         uploadedChunks++;
         remainingChunks.value--;
+    }
+
+    const setTempFile = (responseData:any) => {
+        if (responseData.hasOwnProperty('tempFile') && uploadedChunks === 0) {
+            tempFile.value = responseData.tempFile
+        }
     }
 
     /*

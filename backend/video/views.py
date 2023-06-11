@@ -17,36 +17,42 @@ from mytube.generally_permissons import IsAuthenticated
 from django.core.files.uploadedfile import SimpleUploadedFile
 import os, tempfile
 
-temp_file = ''
-
 
 class VideoView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def __init__(self):
+        self.temp_file = ''
+        super().__init__()
+
     # uploads a video in chunks and saves it in a temporary file
     def post(self, request):
-        global temp_file
         self.check_permissions(request)
 
+        self.temp_file = request.data['tempFile']
+
         if int(request.data['uploadedChunks']) == 0:
-            temp_file = self.create_tempfile().name
+            self.temp_file = self.create_tempfile().name
 
         chunk_data = request.data['chunk']
 
-        with open(temp_file, 'ab') as file:
+        with open(self.temp_file, 'ab') as file:
             file.write(chunk_data.read())
 
         if int(request.data['remainingChunks']) == 1:
             data = self.create_video_data(request)
             self.save_video(data)
 
+        if int(request.data['uploadedChunks']) == 0:
+            return Response({'tempFile': self.temp_file})
+
         return Response(status=200)
 
     # Create the data to save to video when the upload is completed
     def create_video_data(self, request):
-        with open(temp_file, 'rb') as f:
+        with open(self.temp_file, 'rb') as f:
             data = f.read()
-            video = SimpleUploadedFile(f'{os.path.basename(temp_file)}.mp4', data)
+            video = SimpleUploadedFile(f'{os.path.basename(self.temp_file)}.mp4', data)
 
         data = {
             'name': request.data['name'],
@@ -64,7 +70,7 @@ class VideoView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        os.remove(temp_file)
+        os.remove(self.temp_file)
 
     # Create a temporary file
     def create_tempfile(self):
