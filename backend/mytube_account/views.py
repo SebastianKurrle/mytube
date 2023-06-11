@@ -11,7 +11,7 @@ from users.extensions import get_user_by_token
 
 
 class MyTubeAccountView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsMyTubeAccountOwner]
 
     # creates an MyTube account
     def post(self, request):
@@ -34,10 +34,9 @@ class MyTubeAccountView(APIView):
 
     # deletes an account by an id
     def delete(self, request, id):
-        instance = MyTubeAccount.objects.get(id=id)
-
-        if instance is None:
-            return Response(status=404)
+        self.check_permissions(request)
+        instance = get_object_or_404(MyTubeAccount, id=id)
+        self.check_object_permissions(request, instance)
 
         instance.delete()
         return Response(status=200)
@@ -67,6 +66,7 @@ class MyTubeAccountSettingsView(APIView):
 
         return Response(status=200)
 
+    # Deletes the profile picture from a MyTube account
     def delete(self, request, name):
         self.check_permissions(request)
         mt_account = get_object_or_404(MyTubeAccount, name=name)
