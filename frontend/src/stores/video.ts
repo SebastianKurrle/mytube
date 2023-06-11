@@ -26,7 +26,7 @@ export const useVideoStore = defineStore('video', () => {
     const currentProgress = ref(0)
 
     const searchQuery = ref('')
-    const searchResult = reactive(Array<object>())
+    const searchResult = reactive(Array<any>())
 
     /* 
         Upload Vidoes
@@ -120,12 +120,12 @@ export const useVideoStore = defineStore('video', () => {
         If the user is unauthenticated it will return the 10 latest and most popular videos
         If the user has 0 subscribed MyTube accounts it will also return the 10 latest and most popular videos
     */
-    const getSuggestedVideos = async ():Promise<Array<object>> => {
-        const suggestedVideos = Array<object>()
+    const getSuggestedVideos = async ():Promise<Array<any>> => {
+        const suggestedVideos = Array<any>()
         await axios
             .get(`/api/video/suggest/?auth=${authenticatedStore.authenticated}`)
             .then(response => {
-                const data:Array<object> = response.data.videos
+                const data:Array<any> = response.data.videos
                 data.map(video => {
                     suggestedVideos.push(video)
                 })
@@ -193,7 +193,7 @@ export const useVideoStore = defineStore('video', () => {
         await axios
             .get(`/api/video/search/?query=${query}`)
             .then(response => {
-                const result:Array<object> = response.data.searchResult
+                const result:Array<any> = response.data.searchResult
 
                 searchResult.length = 0
 

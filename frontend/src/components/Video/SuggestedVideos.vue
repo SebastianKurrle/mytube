@@ -6,12 +6,12 @@
   // stores
   const videoStore = useVideoStore()
 
-  const suggestedVideos = reactive(Array<object>())
+  const suggestedVideos = reactive(Array<any>())
 
   const loaded = ref(false)
 
   onMounted(async () => {
-    const result:Array<object> = await videoStore.getSuggestedVideos()
+    const result:Array<any> = await videoStore.getSuggestedVideos()
 
     result.map(video => {
       suggestedVideos.push(video)

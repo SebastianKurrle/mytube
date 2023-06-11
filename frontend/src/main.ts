@@ -23,7 +23,7 @@ if (DEBUG) {
 } else {
     axios.defaults.baseURL = 'https://apimt.sebastiankurrle-projects.de'
 }
-axios.defaults.withCredentials = true
+//axios.defaults.withCredentials = true
 
 library.add(fas)
 library.add(far)

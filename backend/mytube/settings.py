@@ -136,10 +136,6 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 
 AUTH_USER_MODEL = 'users.User'
 
-CORS_ALLOW_CREDENTIALS = True
-
-SESSION_COOKIE_SECURE = False
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
