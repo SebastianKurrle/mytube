@@ -20,3 +20,5 @@ MyTube ist eine YouTube Klone welches die wichtigsten features von YouTube imple
 
 **Backend**:
  - Django REST framework
+
+**Link zur Seite:** https://mytube.sebastiankurrle-projects.de 
