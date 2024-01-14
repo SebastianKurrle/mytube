@@ -1,24 +1,29 @@
 # MyTube
 
-MyTube ist eine YouTube Klone welches die wichtigsten features von YouTube implementiert hat
+Welcome to the MyTube repository. MyTube is a video-sharing platform designed to provide users with a seamless experience for uploading, sharing, and viewing videos.
 
-**Features:**
-- Videos hochladen
-- Videos schauen
-- Videos kommentieren
-- Videos bewerten
-- Videos suchen
-- Accounts abonieren
+## Features
 
-### Verwendete Technologien
+- **Video Upload:** Easily upload videos to share with the community.
+- **User Profiles:** Create and customize your user profile.
+- **Social Interaction:** Engage with other users through comments and likes.
+- **Search and Discover:** Find videos based on categories and personalized recommendations.
 
-**Frontend**:
-- Vite
-- Vue3
-- Axios
-- Font Awesome
+## Usage
 
-**Backend**:
- - Django REST framework
+### Video Upload:
 
-**Link zur Seite:** https://mytube.sebastiankurrle-projects.de 
+1. Navigate to the app and click on "Upload Video."
+2. Fill in video details and upload your content.
+
+### User Interaction:
+
+- Like, comment, and share videos to interact with the community.
+
+### Search and Discover:
+
+- Use the search bar to find specific videos or explore recommendations.
+
+
+## Link
+https://mytube.sebastiankurrle-projects.de 
